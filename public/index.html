@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Docoff</title>
+
+    <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
+    <script src="/generated/bundle.js"></script>
+    <link type="text/css" rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <h1>docoff-react-base</h1>
+    <p>This code is common for all `docoff-react-preview` elements on the given page</p>
+    <textarea is="docoff-react-base">
+const MyHello = ({name}) => (
+    <strong>Hello, {name}</strong>
+);
+    </textarea>
+
+    <textarea is="docoff-react-base">
+const MyButton = ({
+  label,
+  onClick,
+}) => (
+  <button onClick={onClick}>{label}</button>
+);
+    </textarea>
+
+
+    <h1>docoff-react-preview</h1>
+    <p>This code renders the JSX</p>
+
+    <h2>Single component</h2>
+    <textarea is="docoff-react-preview">
+<MyHello name="Igor" />
+    </textarea>
+
+    <h2>Multiple components</h2>
+    <textarea is="docoff-react-preview">
+<>
+  <MyHello name="Igor" />
+  <br />
+  <MyButton
+    label="Trigger alert"
+    onClick={() => alert('Alert!')}
+  />
+</>
+    </textarea>
+
+
+    <h2>Example with hooks</h2>
+    <textarea is="docoff-react-preview">
+React.createElement(() => {
+  const [isActive, setIsActive] = React.useState(false);
+  return (
+    <>
+      <MyHello name="Igor" />
+      <br />
+      <MyButton
+        label={isActive ? 'On' : 'Off'}
+        onClick={() => setIsActive(!isActive)}
+      />
+    </>
+  );
+});
+    </textarea>
+
+    <h1>docoff-react-props</h1>
+    <p>This code renders the component props</p>
+
+    <h2>Include via relative URL with overloading</h2>
+
+    This code:
+    <textarea readonly><docoff-react-props data-src="/commonProps.js|/BaseGreeting.jsx|/MyGreeting.jsx"></docoff-react-props></textarea>
+    Produces:
+    <docoff-react-props data-src="/exampleJS/commonProps.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
+
+    <h2>Include via absolute URL</h2>
+    This code:
+    <textarea readonly><docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/Text/Text.jsx"></docoff-react-props></textarea>
+    Produces:
+    <docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/CheckboxField/CheckboxField.jsx"></docoff-react-props>
+
+  </body>
+
+</html>
