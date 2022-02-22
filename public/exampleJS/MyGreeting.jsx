@@ -6,9 +6,14 @@ const MyGreeting = (props) => (
   <BaseGreeting greeting="Hello" { ...props }/>
 );
 
+MyGreeting.defaultProps = {
+  id: BaseGreeting.defaultProps.id,
+  punctuation: '!',
+}
+
 MyGreeting.propTypes = {
-  ...BaseGreeting.props.filter((prop) => prop === 'greeting'),
-  // TODO: what to with greeting? Single option prop with default value? OR whitelist/blacklist?
+  id: BaseGreeting.props.id,
+  punctuation: BaseGreeting.props.punctuation,
   /**
    * The name fo the person to greet
    */

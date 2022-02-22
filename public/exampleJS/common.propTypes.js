@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
 
-export const props = {
+export const propTypes = {
   /**
    * Component ID
    */
   id: PropTypes.string,
+}
+
+export const defaultProps = {
+  id: undefined,
 }
 

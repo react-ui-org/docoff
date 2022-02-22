@@ -18,7 +18,9 @@
   </head>
 
   <body>
-    <h1>docoff-react-base</h1>
+    <h1>Docoff demo</h1>
+
+    <h2>docoff-react-base</h2>
     <p>This code is common for all `docoff-react-preview` elements on the given page</p>
     <textarea is="docoff-react-base">
 const MyHello = ({name}) => (
@@ -36,15 +38,15 @@ const MyButton = ({
     </textarea>
 
 
-    <h1>docoff-react-preview</h1>
+    <h2>docoff-react-preview</h2>
     <p>This code renders the JSX</p>
 
-    <h2>Single component</h2>
+    <h3>Single component</h3>
     <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
     </textarea>
 
-    <h2>Multiple components</h2>
+    <h3>Multiple components</h3>
     <textarea is="docoff-react-preview">
 <>
   <MyHello name="Igor" />
@@ -57,7 +59,7 @@ const MyButton = ({
     </textarea>
 
 
-    <h2>Example with hooks</h2>
+    <h3>Example with hooks</h3>
     <textarea is="docoff-react-preview">
 React.createElement(() => {
   const [isActive, setIsActive] = React.useState(false);
@@ -74,15 +76,15 @@ React.createElement(() => {
 });
     </textarea>
 
-    <h1>docoff-react-props</h1>
-    <p>This code renders the component props</p>
+    <h2>docoff-react-props</h2>
+    <p>This code renders the component prop definition table.</p>
 
     <h2>Include via relative URL with overloading</h2>
 
     This code:
-    <textarea readonly><docoff-react-props data-src="/commonProps.js|/BaseGreeting.jsx|/MyGreeting.jsx"></docoff-react-props></textarea>
+    <textarea readonly><docoff-react-props data-src="/exampleJS/common.propTypes.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props></textarea>
     Produces:
-    <docoff-react-props data-src="/exampleJS/commonProps.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
+    <docoff-react-props data-src="/exampleJS/common.propTypes.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
 
     <h2>Include via absolute URL</h2>
     This code:
