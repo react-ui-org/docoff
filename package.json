@@ -2,7 +2,7 @@
   "private": true,
   "version": "0.1.0",
   "name": "docoff",
-  "description": "Flexible React documentation HTML elements",
+  "description": "Library of custom HTML elements for creating flexible and simple to use `React.Component` documentation",
   "engines": {
     "node": ">=16.14.0",
     "npm": ">=8.5.1"
