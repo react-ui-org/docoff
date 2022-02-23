@@ -4,14 +4,14 @@
  * @param {Object} derivedPropsTypes The propTypes of the derived component
  */
 export const basePropTypesReducer = (basePropTypes, derivedPropNames) => (acc, propName) => {
-    // If the base component propTypes include the derived propType, we use it
-    if (derivedPropNames.includes(propName)) {
-        return {
-            ...acc,
-            [propName]: basePropTypes[propName],
-        }
-    }
+  // If the base component propTypes include the derived propType, we use it
+  if (derivedPropNames.includes(propName)) {
+    return {
+      ...acc,
+      [propName]: basePropTypes[propName],
+    };
+  }
 
-    // We ignore the base component propType otherwise
-    return acc;
-}
+  // We ignore the base component propType otherwise
+  return acc;
+};

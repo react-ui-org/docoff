@@ -1,33 +1,37 @@
 export const getPropTypeHtml = (type) => {
-    const getValue = () => {
-        if (!type.value) {
-            return '';
-        }
-
-        if (type.name === 'shape') {
-            return `
-                <ul>
-                    ${Object.keys(type.value).reduce(
-                        (acc, el) => `${acc}<li>${el}${type.value[el].required ? '*' : ''}: ${getPropTypeHtml(type.value[el])}</li>`,
-                        '',
-                    )}
-                </ul>
-            `;
-        }
-
-        if (Array.isArray(type.value)) {
-            return `
-                <ul>
-                    ${type.value.reduce(
-                        (acc, el) => `${acc}<li>${el.name || el.value}</li>`,
-                        '',
-                    )}
-                </ul>
-            `;
-        }
-
-        return `<ul><li>${getPropTypeHtml(type.value)}</li><ul>`;
+  const getValue = () => {
+    if (type.name === 'custom') {
+      return `<ul><li><pre><code>${type.raw}</code></pre></li></ul>`;
     }
 
-    return `${type.name}${getValue(type)}`;
-}
+    if (!type.value) {
+      return '';
+    }
+
+    if (type.name === 'instanceOf') {
+      return `<ul><li>${type.value}</li></ul>`;
+    }
+
+    if (['shape', 'exact'].includes(type.name)) {
+      const listItems = Object.keys(type.value).reduce(
+        (acc, el) => `${acc}<li>${el}${type.value[el].required ? '*' : ''}: ${getPropTypeHtml(type.value[el])}</li>`,
+        '',
+      );
+
+      return `<ul>${listItems}</ul>`;
+    }
+
+    if (Array.isArray(type.value)) {
+      const listItems = type.value.reduce(
+        (acc, el) => `${acc}<li>${el.name ? getPropTypeHtml(el) : el.value}</li>`,
+        '',
+      );
+
+      return `<ul>${listItems}</ul>`;
+    }
+
+    return `<ul><li>${getPropTypeHtml(type.value)}</li></ul>`;
+  };
+
+  return `${type.name}${getValue(type)}`;
+};

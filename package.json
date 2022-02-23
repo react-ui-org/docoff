@@ -23,10 +23,22 @@
     "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@ungap/custom-elements": "^1.0.0",
+    "@visionappscz/eslint-config-visionapps": "^1.5.0",
     "assert": "^2.0.0",
+    "babel-jest": "^27.5.1",
     "buffer": "^6.0.3",
     "core-js": "^3.20.3",
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-markdown": "^2.2.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "jest": "^27.5.1",
     "markdown-it": "^12.3.2",
     "path-browserify": "^1.0.1",
     "prismjs": "^1.27.0",
@@ -35,8 +47,9 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "eslint": "eslint --ext js src",
     "start": "webpack serve --mode=development",
-    "test": "npm run eslint"
+    "test": "npm run test:eslint && npm run test:jest",
+    "test:eslint": "eslint --ext js,jsx src public/exampleJS",
+    "test:jest": "jest"
   }
 }
