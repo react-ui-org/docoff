@@ -79,19 +79,37 @@ React.createElement(() => {
     <h2>docoff-react-props</h2>
     <p>This code renders the component prop definition table.</p>
 
-    <h2>Include via relative URL with overloading</h2>
+    <h3>Include via relative URL with overloading</h3>
 
     This code:
-    <textarea readonly><docoff-react-props data-src="/exampleJS/common.propTypes.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props></textarea>
-    Produces:
-    <docoff-react-props data-src="/exampleJS/common.propTypes.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
+    <textarea readonly rows="6">
+<docoff-react-props data-src="
+    /exampleJS/common.props.js
+    |/exampleJS/BaseGreeting.jsx
+    |/exampleJS/MyGreeting.jsx
+"></docoff-react-props>
+    </textarea>
 
-    <h2>Include via absolute URL</h2>
-    This code:
-    <textarea readonly><docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/Text/Text.jsx"></docoff-react-props></textarea>
     Produces:
-    <docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/CheckboxField/CheckboxField.jsx"></docoff-react-props>
+    <docoff-react-props data-src="
+        /exampleJS/common.props.js
+        |/exampleJS/BaseGreeting.jsx
+        |/exampleJS/MyGreeting.jsx
+    "></docoff-react-props>
+
+    <h3>Include via absolute URL</h3>
+
+    This code:
+    <textarea readonly rows="4">
+<docoff-react-props
+    data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/Text/Text.jsx"
+></docoff-react-props>
+    </textarea>
+
+    Produces:
+    <docoff-react-props
+        data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/CheckboxField/CheckboxField.jsx"
+    ></docoff-react-props>
 
   </body>
-
 </html>

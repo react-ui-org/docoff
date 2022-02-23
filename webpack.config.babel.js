@@ -2,13 +2,15 @@ const Path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
-module.exports = () => ({
+module.exports = (env, argv) => ({
   devServer: {
     headers: {},
     historyApiFallback: true,
     static: Path.join(__dirname, 'public'),
   },
-  devtool: 'eval-cheap-module-source-map',
+  devtool: argv.mode === 'development'
+      ? 'eval-cheap-module-source-map'
+      : false,
   entry: {
     bundle: [
       Path.join(__dirname, 'node_modules/@ungap/custom-elements'),

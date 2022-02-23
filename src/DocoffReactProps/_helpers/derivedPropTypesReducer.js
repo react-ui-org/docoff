@@ -15,7 +15,11 @@ export const derivedPropTypesReducer = (basePropTypes, derivedPropTypes) => (acc
 
     // If the derived component propType defines default value we use the base component propTypes definition
     // with the new default value
-    if (basePropTypes[propName] && !derivedPropTypes[propName].defaultValue.computed) {
+    if (
+        basePropTypes[propName]
+        && derivedPropTypes[propName].defaultValue
+        && !derivedPropTypes[propName].defaultValue.computed
+    ) {
         return {
             ...acc,
             [propName]: {

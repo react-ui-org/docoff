@@ -11,8 +11,12 @@ class DocoffReactProps extends HTMLElement {
     }
 
     async connectedCallback() {
-        // Obtain the information about the components
-        const componentUrls = this.dataset.src.split('|');
+        // Parse the component URLs
+        const componentUrls = this.dataset.src
+            .split('|')
+            .map((url) => url.trim());
+
+        // Download the component source files and extract the information about the components
         const componentInfos = await Promise.all(componentUrls.map(async (componentUrl) => {
             const componentRes = await fetch(componentUrl);
             let componentSrc = await componentRes.text();
@@ -22,13 +26,13 @@ class DocoffReactProps extends HTMLElement {
             // For this to work the file must declare:
             //  * `propTypes` holding the props Object
             //  * optionally `defaultProps` holding their respective default values
-            if (componentUrl.endsWith('.propTypes.js')) {
+            if (componentUrl.endsWith('.props.js')) {
                 componentSrc = `
                     import React from 'react';
                     ${componentSrc}
-                    export const Component = () => (<span />);
-                    Component.propTypes = propTypes;
-                    Component.defaultProps = defaultProps;
+                    export const DocoffReactFakeComponent = () => (<span />);
+                    DocoffReactFakeComponent.propTypes = propTypes;
+                    DocoffReactFakeComponent.defaultProps = defaultProps;
                 `
             }
 
@@ -46,8 +50,13 @@ class DocoffReactProps extends HTMLElement {
                 const derivedPropTypes = info[0].props;
                 const derivedPropNames = Object.keys(derivedPropTypes);
 
+                // We do not filter base component props if the base component is in fact a prop definition file
+                const basePropTypes = info[0].displayName === 'DocoffReactFakeComponent'
+                    ? acc
+                    : { ...(Object.keys(acc).reduce(basePropTypesReducer(acc, derivedPropNames), {})) };
+
                 return {
-                    ...(Object.keys(acc).reduce(basePropTypesReducer(acc, derivedPropNames), {})),
+                    ...basePropTypes,
                     ...(derivedPropNames.reduce(derivedPropTypesReducer(acc, derivedPropTypes), {})),
                 }
             },
