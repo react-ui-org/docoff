@@ -1,3 +1,4 @@
+import Prism from 'prismjs';
 import { createContainer } from '../DocoffReactPreview/createContainer';
 
 class DocoffReactBase extends HTMLTextAreaElement {
@@ -18,7 +19,11 @@ class DocoffReactBase extends HTMLTextAreaElement {
             // No content can mean the HTML was not parsed yet and we must not update anything in such case
             if (baseRawCode) {
                 this.value = baseRawCode;
-                container.querySelector('[data-type=textOverlay]').innerText = baseRawCode;
+                container.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
+                    baseRawCode,
+                    Prism.languages.javascript,
+                    'javascript'
+                );;
 
                 // Ensure the size is correct
                 this.style.height = 'auto';

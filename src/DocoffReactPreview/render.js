@@ -1,6 +1,12 @@
+import Prism from 'prismjs';
+
 export const render = (container, previewRawCode, baseRawCode) => {
     // Update the text overlay content
-    container.querySelector('[data-type=textOverlay]').innerText = previewRawCode;
+    container.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
+        previewRawCode,
+        Prism.languages.jsx,
+        'jsx'
+    );
 
     const viewElGetter = `codeViewEl = document.currentScript.parentNode.querySelector('[data-type=preview]')`;
 

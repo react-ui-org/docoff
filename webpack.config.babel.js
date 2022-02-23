@@ -2,6 +2,8 @@ const Path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
+const MAX_OUTPUT_SIZE_KB = 1600000;
+
 module.exports = (env, argv) => ({
   devServer: {
     headers: {},
@@ -24,6 +26,10 @@ module.exports = (env, argv) => ({
         test: /\.(js|jsx)$/,
         use: [{ loader: 'babel-loader' }],
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   optimization: {
@@ -37,6 +43,21 @@ module.exports = (env, argv) => ({
     path: Path.join(__dirname, 'public/generated'),
     publicPath: '/generated/',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.BABEL_ENV': JSON.stringify('production'),
+      'process.env.NODE_DEBUG': 'false',
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process',
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
+  performance: {
+    maxAssetSize: MAX_OUTPUT_SIZE_KB,
+    maxEntrypointSize: MAX_OUTPUT_SIZE_KB,
+  },
   resolve: {
     extensions: ['.js'],
     fallback: {
@@ -49,19 +70,4 @@ module.exports = (env, argv) => ({
       process: require.resolve('process/browser'),
     },
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(
-          process.env.NODE_ENV || 'development',
-      ),
-      'process.env.BABEL_ENV': JSON.stringify(
-          process.env.NODE_ENV || 'development',
-      ),
-      'process.env.NODE_DEBUG': 'false',
-    }),
-    new webpack.ProvidePlugin({
-      process: 'process',
-      Buffer: ['buffer', 'Buffer'],
-    }),
-  ]
 });
