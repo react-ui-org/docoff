@@ -1,26 +1,29 @@
 // We do not want to install dependencies, this file is only here as example of prop table generation
 // eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-unresolved
-import React from 'react';
 import BaseGreeting from './BaseGreeting';
 
-const MyGreeting = (props) => (
-  <BaseGreeting greeting="Hello" {...props} />
-);
+// For better performance we wrap the `BaseGreeting` on JS level without creating another component
+const MyGreeting = (props) => BaseGreeting({
+  ...props,
+  greeting: 'Hello',
+});
 
-MyGreeting.defaultProps = {
+const defaultProps = {
   id: BaseGreeting.defaultProps.id,
   punctuation: '!',
 };
 
-MyGreeting.propTypes = {
+const propTypes = {
   id: BaseGreeting.props.id,
   /**
-   * The name fo the person to greet
+   * Whom to greet
    */
   name: PropTypes.oneOf(['World', 'Moon']).isRequired,
   punctuation: BaseGreeting.props.punctuation,
 };
+
+MyGreeting.propsTypes = propTypes;
+MyGreeting.defaultProps = defaultProps;
 
 export default MyGreeting;
