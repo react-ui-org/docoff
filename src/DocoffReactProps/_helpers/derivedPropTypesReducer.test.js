@@ -1,27 +1,48 @@
 import { derivedPropTypesReducer } from './derivedPropTypesReducer';
 
-const basePropTypes = {
-  propA: { description: 'base' },
-  propB: { description: 'base' },
-  propC: { description: 'base' },
-};
+describe('functionality', () => {
+  it('drops props present in base definition and not present in overloading definition', () => {
+    const basePropTypes = {
+      propA: { description: 'base' },
+    };
 
-const derivedPropTypes = {
-  propA: { description: 'derived' },
-  propB: { defaultValue: 'derived' },
-  propC: {},
-};
+    const derivedPropTypes = {};
+    const reducer = derivedPropTypesReducer(basePropTypes, derivedPropTypes);
 
-describe('rendering', () => {
-  it('drops prop present in basePropTypes and not present in derivePropTypes', () => {
+    expect(Object.keys(derivedPropTypes).reduce(reducer, {})).toEqual({});
+  });
+
+  it('use overloading definition if it provides desceription', () => {
+    const basePropTypes = {
+      propA: { description: 'base' },
+    };
+
+    const derivedPropTypes = {
+      propA: { description: 'derived' },
+    };
     const reducer = derivedPropTypesReducer(basePropTypes, derivedPropTypes);
 
     expect(Object.keys(derivedPropTypes).reduce(reducer, {})).toEqual({
       propA: { description: 'derived' },
-      propB: {
+    });
+  });
+
+  it('use overloading defaultValue with base definition', () => {
+    const basePropTypes = {
+      propA: { description: 'base', defaultValue: 'base' },
+    };
+
+    const derivedPropTypes = {
+      propA: { defaultValue: 'derived' },
+    };
+    const reducer = derivedPropTypesReducer(basePropTypes, derivedPropTypes);
+
+    expect(Object.keys(derivedPropTypes).reduce(reducer, {})).toEqual({
+      propA: {
         defaultValue: 'derived',
         description: 'base',
       },
     });
   });
+
 });

@@ -83,7 +83,7 @@ This element renders a React component prop definition table.
 
 **Design decisions:**
 
-1. The aim was to strike a balance between sane API, technical possibilities and ease of use. Some solutions (e.g. the fake component) are not elegant, but they make this component more useful.
+1. The aim was to strike a balance between sane API, technical possibilities and ease of use. Some solutions (e.g. the [fake component](./src/DocoffReactProps/_helpers/getFakeComponentSrc.js)) are not elegant, but they make this component more useful.
 2. It is opinionated as there was no way to make it useful without it. See the inheritance rules in the [Inheritance Rules](#inheritance-rules) section.
 3. Everything happens in browser to eliminate the need for a build pipe.
 
@@ -91,7 +91,7 @@ This element renders a React component prop definition table.
 
 See [index.html](./public/index.html) for a basic working example.
 
-#### Props with No Inheritance
+#### Single Component Props
 
 To render props of a single React.Component:
 
@@ -107,10 +107,7 @@ To render props of a single React.Component:
 
 #### Props with Inheritance
 
-This element provides some shortcuts to cascade prop type definitions. The aim is to make it easier to:
-
- * wrap base `React.Components` and tweak their API
- * allow using *prop definition file*s separate from component definition (useful to avoid huge files or to have one prop definition used on several places)
+This element also provides some shortcuts to cascade prop type definitions. It allows using *prop definition files* separate from component definition. It is useful to avoid huge files or to have one prop definition used on several places.
 
 Beware, that some React related eslint rules do not always work with the more complicated inheritance constructs.
 
@@ -118,35 +115,25 @@ Beware, that some React related eslint rules do not always work with the more co
 
 The files that are parsed for prop definition need to be of the following types:
 
-1. `React.Component` that can be parsed by [react-docgen](https://github.com/reactjs/react-docgen). In short, it must import and depend on `React`. These files must:
+1. `React.Component` that can be parsed by [react-docgen](https://github.com/reactjs/react-docgen) - in short, this file must import and depend on `React`. It must:
    1. Use the `*.js` or `*.jsx` suffix
-   2. There can be only one component per file.
-2. A wrapper of a `React.Component`. This file must not create a `React.Component` as it only wraps the component on the JS level (e.g. `const MyGreeting = (props) => BaseGreeting({ ...props });`). These files must:
-   1. Define constant `defaultProps` (even when empty)
-   2. Define constant `propTypes` (even when empty)
-   3. There can be only one component wrapper per file
-   4. It must not import `React`,  we check
-3. A *prop definition file*. This file must not create a `React.Component` as it only defines `propTypes` and `defaultProps`. These files must:
-   1. Use the `*.props.js suffix
+   2. Define only one component per file
+2. A *prop definition file* - it must not create a `React.Component` as it only defines `propTypes` and `defaultProps`. It must:
+   1. Use the `*.props.js` suffix
    2. Define constant `defaultProps` (even when empty)
    3. Define constant `propTypes` (even when empty)
 
-Parsing of files describe in point 2) and 3) is not too elegant. As [react-docgen](https://github.com/reactjs/react-docgen) only supports parsing components, a fake component is created around these definitions. It is not a robust solution. If you run into problems, see the [source code](.src/DocoffReactProps/DocoffReactProps.js) to see what is going on.
+Parsing of the *prop definition file* is not too elegant. As [react-docgen](https://github.com/reactjs/react-docgen) only supports parsing components, a fake component is created around these definitions. It is not a robust solution. If you run into problems, see the [source code](./src/DocoffReactProps/DocoffReactProps.js) to see what is going on.
 
 #####  Inheritance Rules
 
+Typically, there should be only one `React.Component` definition as the last file in the cascade. All files preceding it should be *prop definition files*.
+
 There is no clean way to achieve full inheritance so for things to work the following rules must be observed:
 
-1. The props are overloaded one at a time. The result of one merge is used as the base for the next merge.
-2. Derived component must define all `propTypes` and `defaultProps`, that it uses. However, they can be references to their respective values in the base component. **Destructuring is not supported.** If a component (not a *prop definition file*) does not define a `propType`, it will not show in the table even if the base element did define it.
-
-   *Reason: This is needed for cases when the derived component needs to tighten the API.*
-3. Only prop types definition with docblock description are used in the rendered table. Therefore, if a derived component defines a propType, but does not provide a description, the definition from the base component is used.
-
-   *Reason: This allows the derived component do inherit the prop type definition.*
-4. If the derived component defines a concrete default prop value that is not a reference elsewhere this new values is used. This happens independently of the prop type definition inheritance defined in rule 3).
-
-   *Reason: This allows the derived element to change default values of props.*
+1. The props are overloaded one at a time in the sequence as defined.
+2. The component must define all `propTypes` and `defaultProps`, that it uses. However, they can be references to definitions in a *prop definition file*. **Destructuring is not supported.**
+3. If prop type has a docblock description its definition and description will be used. Otherwise, the definition and description from the referenced *prop definition file* will be used.
 
 #### Usage
 

@@ -8,41 +8,31 @@ import {
   defaultProps as commonDefaultProps,
 } from './common.props';
 
-const BaseGreeting = ({
-  id,
+const Greeting = ({
   greeting,
+  id,
   name,
-  punctuation,
 }) => (
   <strong id={id}>
     {greeting}
     ,
     {' '}
     {name}
-    {punctuation}
   </strong>
 );
 
-BaseGreeting.defaultProps = {
+Greeting.defaultProps = {
+  greeting: 'Hi',
   id: commonDefaultProps.id,
-  punctuation: '.',
 };
 
-BaseGreeting.propTypes = {
-  ...commonPropTypes,
-  /**
-   * The greeting to use
-   */
-  greeting: PropTypes.string.isRequired,
+Greeting.propTypes = {
+  greeting: commonPropTypes.greeting,
   id: commonPropTypes.id,
   /**
-   * The name fo the person to greet
+   * The name of the person to greet
    */
   name: PropTypes.string.isRequired,
-  /**
-   * Sentence punctuation
-   */
-  punctuation: PropTypes.string,
 };
 
-export default BaseGreeting;
+export default Greeting;

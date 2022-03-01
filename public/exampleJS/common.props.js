@@ -4,12 +4,21 @@ import PropTypes from 'prop-types';
 
 export const propTypes = {
   /**
+   * The greeting to use
+   */
+  greeting: PropTypes.string,
+  /**
    * Component ID
    */
   id: PropTypes.string,
+  /**
+   * Unused prop
+   */
+  unused: PropTypes.string,
 };
 
 export const defaultProps = {
+  greeting: 'Hello',
   id: undefined,
 };
 

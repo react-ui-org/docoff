@@ -8,7 +8,6 @@ import { getTableElement } from './_helpers/getTableElement';
 import { docgenParseOptions } from './docgenParseOptions';
 
 const PROP_DEF_COMPONENT = 'DocoffReactPropDefComponent';
-const WRAPPER_COMPONENT = 'DocoffReactWrapperComponent';
 
 class DocoffReactProps extends HTMLElement {
   async connectedCallback() {
@@ -20,26 +19,20 @@ class DocoffReactProps extends HTMLElement {
     // Download the component source files and extract the information about the components
     const componentInfos = await Promise.all(componentUrls.map(async (componentUrl) => {
       const componentRes = await fetch(componentUrl);
-      const componentSrc = await componentRes.text();
+      if (componentRes.status !== 200) {
+        throw new Error(`Resource '${componentUrl}' could not be downloaded. HTTP Status Code: ${componentRes.status}`);
+      }
+      const componentRawSrc = await componentRes.text();
+      const componentSrc = componentUrl.endsWith('.props.js')
+        ? getFakeComponentSrc(componentRawSrc, PROP_DEF_COMPONENT)
+        : componentRawSrc;
 
-      const parseComponentSrc = (src) => docgen.parse(
-        src,
+      return docgen.parse(
+        componentSrc,
         docgen.resolver.findAllExportedComponentDefinitions,
         null,
         docgenParseOptions,
       );
-
-      if (componentUrl.endsWith('.props.js')) {
-        // Parse prop definition file
-        return parseComponentSrc(getFakeComponentSrc(componentSrc, PROP_DEF_COMPONENT));
-      }
-      try {
-        // Parse `React.Component`
-        return parseComponentSrc(componentSrc);
-      } catch (e) {
-        // Parse `React.Component` wrapper
-        return parseComponentSrc(getFakeComponentSrc(componentSrc, WRAPPER_COMPONENT));
-      }
     }));
 
     // Merge the propType definitions
@@ -48,14 +41,17 @@ class DocoffReactProps extends HTMLElement {
         const derivedPropTypes = info[0].props;
         const derivedPropNames = Object.keys(derivedPropTypes);
 
-        // We do not filter base component props if the base component is in fact a prop definition file
-        const basePropTypes = info[0].displayName === PROP_DEF_COMPONENT
-          ? acc
-          : { ...(Object.keys(acc).reduce(basePropTypesReducer(acc, derivedPropNames), {})) };
-
         return {
-          ...basePropTypes,
-          ...(derivedPropNames.reduce(derivedPropTypesReducer(acc, derivedPropTypes), {})),
+          // Remove props not used in derived
+          ...(Object.keys(acc).reduce(
+            basePropTypesReducer(acc, derivedPropNames),
+            {},
+          )),
+          // Add props from derived
+          ...(derivedPropNames.reduce(
+            derivedPropTypesReducer(acc, derivedPropTypes),
+            {},
+          )),
         };
       },
       {},
