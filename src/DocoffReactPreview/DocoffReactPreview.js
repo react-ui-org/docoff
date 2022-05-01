@@ -1,12 +1,23 @@
-import { createContainer } from './_helpers/createContainer';
+import { CODE_EDITOR_CLASSNAME } from '../constants';
+import { createLivePreview } from '../_helpers/createLivePreview';
+import { createRootContainer } from '../_helpers/createRootContainer';
 import { render } from './render';
 
 class DocoffReactPreview extends HTMLTextAreaElement {
   connectedCallback() {
-    // Prevent Firefox from remembering the code changes made by user
-    this.autocomplete = 'off';
+    this.classList.add(CODE_EDITOR_CLASSNAME);
 
-    const container = createContainer();
+    this.autocapitalize = 'none';
+    this.autocomplete = 'off';
+    this.setAttribute('autocorrect', 'off');
+    this.setAttribute('data-gramm', 'false');
+    this.setAttribute('spell-check', 'false');
+
+    const container = createRootContainer();
+    const livePreview = createLivePreview();
+
+    container.prepend(livePreview);
+
     this.parentNode.insertBefore(container, this);
 
     // Loop through all `docoff-react-base` elements on page.
@@ -31,8 +42,8 @@ class DocoffReactPreview extends HTMLTextAreaElement {
       textOverlay.style.height = heightStyle;
     };
 
-    // Removes white space, renders adn adjusts height
-    // No content can mean the HTML was not parsed yet and we must not update anything in such case
+    // Removes white space, renders and adjusts height
+    // No content can mean the HTML has not been parsed yet and we must not update anything in such case
     const initialRender = () => {
       const previewRawCode = this.value.trim();
       if (previewRawCode) {
