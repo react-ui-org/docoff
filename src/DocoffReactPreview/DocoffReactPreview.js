@@ -1,10 +1,17 @@
 import { CODE_EDITOR_CLASSNAME } from '../constants';
+import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
 import { createLivePreview } from '../_helpers/createLivePreview';
 import { createRootContainer } from '../_helpers/createRootContainer';
 import { render } from './render';
 
 class DocoffReactPreview extends HTMLTextAreaElement {
   connectedCallback() {
+    // We need to ensure that this Element will get initiated only once even if we move it around
+    if (this.initiated) {
+      return;
+    }
+    this.initiated = true;
+
     this.classList.add(CODE_EDITOR_CLASSNAME);
 
     this.autocapitalize = 'none';
@@ -15,10 +22,13 @@ class DocoffReactPreview extends HTMLTextAreaElement {
 
     const container = createRootContainer();
     const livePreview = createLivePreview();
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
 
-    container.prepend(livePreview);
-
+    container.appendChild(codeSyntaxHighlighter);
+    container.appendChild(livePreview);
     this.parentNode.insertBefore(container, this);
+
+    codeSyntaxHighlighter.appendChild(this);
 
     // Loop through all `docoff-react-base` elements on page.
     // They must be placed before any `docoff-react-preview` elements otherwise they would not be parsed yet.

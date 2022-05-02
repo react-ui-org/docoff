@@ -1,4 +1,5 @@
 import Prism from 'prismjs';
+import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
 import { createRootContainer } from '../_helpers/createRootContainer';
 import { CODE_EDITOR_CLASSNAME } from '../constants';
 
@@ -8,6 +9,8 @@ class DocoffReactBase extends HTMLTextAreaElement {
     this.classList.add(CODE_EDITOR_CLASSNAME);
 
     const container = createRootContainer();
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
+    container.appendChild(codeSyntaxHighlighter);
     this.parentNode.insertBefore(container, this);
 
     const initialRender = () => {
