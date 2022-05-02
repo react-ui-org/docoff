@@ -27,7 +27,7 @@
 
 .docoff-Code__editor {
   /* TODO Uncomment once `textarea` is a first child of `.docoff-Code`. */
-  /*position: absolute;*/
+  position: absolute;
   z-index: 2;
   top: 0;
   right: 0;

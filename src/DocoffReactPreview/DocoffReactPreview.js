@@ -24,8 +24,8 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     const livePreview = createLivePreview();
     const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
 
-    container.appendChild(codeSyntaxHighlighter);
     container.appendChild(livePreview);
+    container.appendChild(codeSyntaxHighlighter);
     this.parentNode.insertBefore(container, this);
 
     codeSyntaxHighlighter.appendChild(this);
