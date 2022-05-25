@@ -1,11 +1,16 @@
 import Prism from 'prismjs';
-import { createContainer } from '../DocoffReactPreview/_helpers/createContainer';
+import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
+import { createRootContainer } from '../_helpers/createRootContainer';
+import { CODE_EDITOR_CLASSNAME } from '../constants';
 
 class DocoffReactBase extends HTMLTextAreaElement {
   connectedCallback() {
     this.readOnly = true;
+    this.classList.add(CODE_EDITOR_CLASSNAME);
 
-    const container = createContainer();
+    const container = createRootContainer();
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
+    container.appendChild(codeSyntaxHighlighter);
     this.parentNode.insertBefore(container, this);
 
     const initialRender = () => {
@@ -31,7 +36,7 @@ class DocoffReactBase extends HTMLTextAreaElement {
     const observer = new MutationObserver(initialRender);
     observer.observe(this, { childList: true });
 
-    // Run the polyfill is loaded
+    // Run when the polyfill is loaded
     initialRender();
   }
 }

@@ -7,7 +7,7 @@ component library documentation.
 
 1. to be documentation stack independent
 2. to have very little dependencies
-3. to not force a specific versions of `React`
+3. to not force a specific version of `React`
 
 
 ## `docoff-react-base` / `docoff-react-preview`
@@ -18,11 +18,12 @@ These components allow to create a live editable JSX component demo in browser.
 
 1. The documentation elements are `<textarea>` based custom element. This is needed so as
     that special HTML characters (`<`, `>` etc.) are not parsed by the browser
-    and are accessible to the JS as text.
+    and are accessible to JS as text.
 2. All rendering code is run from within a `<script>` tag inserted into the
-    document. This is needed so that the `React` version is not hard coded in
+    document. This is needed so that the `React` version is not hard-coded in
     this library and can be loaded by the user in the desired version.
-3. `@babel/standalone` is loaded via CDN because that seems to be the only supported way
+3. `@babel/standalone` is loaded via CDN because that seems to be the only
+    supported way.
 
 
 ### Usage

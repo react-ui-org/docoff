@@ -1,13 +1,34 @@
-import { createContainer } from './_helpers/createContainer';
+import { CODE_EDITOR_CLASSNAME } from '../constants';
+import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
+import { createLivePreview } from '../_helpers/createLivePreview';
+import { createRootContainer } from '../_helpers/createRootContainer';
 import { render } from './render';
 
 class DocoffReactPreview extends HTMLTextAreaElement {
   connectedCallback() {
-    // Prevent Firefox from remembering the code changes made by user
-    this.autocomplete = 'off';
+    // We need to ensure that this Element will get initiated only once even if we move it around
+    if (this.initiated) {
+      return;
+    }
+    this.initiated = true;
 
-    const container = createContainer();
+    this.classList.add(CODE_EDITOR_CLASSNAME);
+
+    this.autocapitalize = 'none';
+    this.autocomplete = 'off';
+    this.setAttribute('autocorrect', 'off');
+    this.setAttribute('data-gramm', 'false');
+    this.setAttribute('spell-check', 'false');
+
+    const container = createRootContainer();
+    const livePreview = createLivePreview();
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
+
+    container.appendChild(livePreview);
+    container.appendChild(codeSyntaxHighlighter);
     this.parentNode.insertBefore(container, this);
+
+    codeSyntaxHighlighter.appendChild(this);
 
     // Loop through all `docoff-react-base` elements on page.
     // They must be placed before any `docoff-react-preview` elements otherwise they would not be parsed yet.
@@ -31,8 +52,8 @@ class DocoffReactPreview extends HTMLTextAreaElement {
       textOverlay.style.height = heightStyle;
     };
 
-    // Removes white space, renders adn adjusts height
-    // No content can mean the HTML was not parsed yet and we must not update anything in such case
+    // Removes white space, renders and adjusts height
+    // No content can mean the HTML has not been parsed yet and we must not update anything in such case
     const initialRender = () => {
       const previewRawCode = this.value.trim();
       if (previewRawCode) {
