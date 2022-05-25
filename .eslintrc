@@ -1,0 +1,13 @@
+{
+  "extends" : [
+    "@visionappscz/eslint-config-visionapps"
+  ],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "parser": "@babel/eslint-parser",
+  "rules": {
+    "import/prefer-default-export": "off"
+  }
+}

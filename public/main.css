@@ -1,0 +1,64 @@
+:root {
+  --docoff-border-color: rgb(206, 212, 222);
+  --docoff-border-radius: 0.35em;
+  --docoff-background-color: rgba(179, 179, 179, 0.1);
+}
+
+.docoff-LivePreview {
+  padding: 1em;
+  border: 1px solid var(--docoff-border-color);
+  border-bottom-style: none;
+  border-radius: var(--docoff-border-radius);
+  background-color: var(--docoff-background-color);
+}
+
+.docoff-LivePreview:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.docoff-Code {
+  position: relative;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  line-height: 1.5;
+  color: lightblue;
+}
+
+.docoff-Code__editor {
+  /* TODO Uncomment once `textarea` is a first child of `.docoff-Code`. */
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  border: none;
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
+  resize: none;
+  -webkit-text-fill-color: transparent;
+}
+
+.docoff-Code__editor:focus {
+  outline: none;
+}
+
+[class*="language-"].docoff-Code__syntaxHighlighter {
+  position: relative;
+  z-index: 1;
+  margin-block: 0;
+  border: none;
+  border-radius: var(--docoff-border-radius);
+  font: inherit;
+  pointer-events: none;
+}
+
+.docoff-Code:not(:first-child) > [class*="language-"].docoff-Code__syntaxHighlighter {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
