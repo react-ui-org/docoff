@@ -1,7 +1,7 @@
 import { CODE_EDITOR_CLASSNAME } from '../constants';
 import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
-import { createLivePreview } from '../_helpers/createLivePreview';
 import { createRootContainer } from '../_helpers/createRootContainer';
+import { createLivePreview } from './_helpers/createLivePreview';
 import { render } from './render';
 
 class DocoffReactPreview extends HTMLTextAreaElement {

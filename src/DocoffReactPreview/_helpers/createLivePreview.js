@@ -1,4 +1,4 @@
-import { LIVE_PREVIEW_CLASSNAME } from '../constants';
+import { LIVE_PREVIEW_CLASSNAME } from '../../constants';
 
 export const createLivePreview = () => {
   const livePreview = document.createElement('div');
