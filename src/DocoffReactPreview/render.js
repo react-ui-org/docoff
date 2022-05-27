@@ -29,24 +29,24 @@ export const render = (container, previewRawCode, baseRawCode) => {
     // We need to wrap the code in an anonymous function to scope constants/variables and
     // prevent variable redeclaration errors
     scriptText = `
-            (() => {
-                ${baseTransCode}
-                ${viewElGetter}
-                try {
-                    ReactDOM.render(${previewTransCode}, codeViewEl);
-                } catch (e) {
-                    ReactDOM.unmountComponentAtNode(codeViewEl);
-                    codeViewEl.innerText = e.message;
-                }
-            })();
-        `;
+      (() => {
+        ${baseTransCode}
+        ${viewElGetter}
+        try {
+          ReactDOM.render(${previewTransCode}, codeViewEl);
+        } catch (e) {
+          ReactDOM.unmountComponentAtNode(codeViewEl);
+          codeViewEl.innerText = e.message;
+        }
+      })();
+    `;
   } catch (e) {
     // The `e.message` can be multiline, so we need to use backticks (`).
     scriptText = `
-            ${viewElGetter}
-            ReactDOM.unmountComponentAtNode(codeViewEl);
-            codeViewEl.innerText = \`${e.message}\`;
-        `;
+      ${viewElGetter}
+      ReactDOM.unmountComponentAtNode(codeViewEl);
+      codeViewEl.innerText = \`${e.message}\`;
+    `;
   }
 
   // First we add the script to modify the DOM
