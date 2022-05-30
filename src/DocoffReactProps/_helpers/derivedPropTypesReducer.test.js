@@ -29,7 +29,10 @@ describe('functionality', () => {
 
   it('use overloading defaultValue with base definition', () => {
     const basePropTypes = {
-      propA: { description: 'base', defaultValue: 'base' },
+      propA: {
+        defaultValue: 'base',
+        description: 'base',
+      },
     };
 
     const derivedPropTypes = {
@@ -44,5 +47,4 @@ describe('functionality', () => {
       },
     });
   });
-
 });
