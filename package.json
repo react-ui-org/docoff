@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/react-ui-org/react-ui/issues"
   },
-  "main": "src/main.jsx",
+  "browser": "public/generated/bundle.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/react-ui-org/docoff"
@@ -66,6 +66,7 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
+    "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
     "test": "npm run test:eslint && npm run test:jest",
     "test:eslint": "eslint --ext js,jsx src public/exampleJS",

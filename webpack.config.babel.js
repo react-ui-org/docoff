@@ -15,7 +15,7 @@ module.exports = (env, argv) => ({
       : false,
   entry: {
     bundle: [
-      Path.join(__dirname, 'node_modules/@ungap/custom-elements'),
+      Path.join(__dirname, 'node_modules/@ungap/custom-elements/index.js'),
       Path.join(__dirname, 'src/main.js'),
     ]
   },
