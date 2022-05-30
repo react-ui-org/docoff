@@ -1,49 +1,68 @@
 {
-  "private": true,
-  "version": "0.1.0",
-  "name": "docoff",
+  "name": "@react-ui-org/docoff",
   "description": "Library of custom HTML elements for creating flexible and simple to use `React.Component` documentation",
+  "version": "0.1.0",
+  "keywords": [
+    "react",
+    "documentation",
+    "ui",
+    "components",
+    "ui-library",
+    "ui-components",
+    "pattern-library",
+    "react-components",
+    "react-component-library"
+  ],
+  "homepage": "https://github.com/react-ui-org/docoff",
+  "author": "The React UI Authors (https://github.com/react-ui-org/react-ui/graphs/contributors)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/react-ui-org/react-ui/issues"
+  },
+  "main": "src/main.jsx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-ui-org/docoff"
+  },
   "engines": {
     "node": ">=16.14.0",
     "npm": ">=8.5.1"
   },
-  "main": "src/main.jsx",
+  "dependencies": {
+    "@ungap/custom-elements": "^1.0.0",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "core-js": "^3.22.7",
+    "markdown-it": "^13.0.1",
+    "path-browserify": "^1.0.1",
+    "prismjs": "^1.27.0",
+    "process": "^0.11.10",
+    "react-docgen": "^5.4.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.16.12",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.10",
     "@babel/preset-react": "^7.16.7",
     "@babel/register": "^7.16.9",
+    "@visionappscz/eslint-config-visionapps": "^1.5.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-prismjs": "^2.1.0",
     "css-loader": "^6.6.0",
-    "style-loader": "^3.3.1",
-    "terser-webpack-plugin": "^4.2.3",
-    "webpack": "^5.66.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.3"
-  },
-  "dependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@ungap/custom-elements": "^1.0.0",
-    "@visionappscz/eslint-config-visionapps": "^1.5.0",
-    "assert": "^2.0.0",
-    "babel-jest": "^27.5.1",
-    "buffer": "^6.0.3",
-    "core-js": "^3.20.3",
     "eslint": "^8.9.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-markdown": "^2.2.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "jest": "^27.5.1",
-    "markdown-it": "^12.3.2",
-    "path-browserify": "^1.0.1",
-    "prismjs": "^1.27.0",
-    "process": "^0.11.10",
-    "react-docgen": "^5.4.0"
+    "jest": "^28.1.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.1",
+    "uglify-js": "^3.15.5",
+    "webpack": "^5.66.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.3"
   },
   "scripts": {
     "build": "webpack --mode=production",
