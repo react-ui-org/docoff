@@ -12,68 +12,112 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link type="text/css" rel="stylesheet" href="main.css" />
+    <link type="text/css" rel="stylesheet" href="/main.css" />
 
     <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
     <script src="/generated/bundle.js"></script>
+    <style>
+      h2 {
+        padding-top: 2em;
+      }
+      h3, h4 {
+        padding-top: 1em;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+      thead th {
+        width: 25%;
+      }
+    </style>
   </head>
 
   <body class="py-5">
     <div class="container">
 
-      <h1>Docoff demo</h1>
+      <h1>Docoff Demo</h1>
 
       <h2><code>docoff-react-base</code></h2>
-      <p>This code is common for all <code>docoff-react-preview</code> elements on the given page</p>
-      <textarea is="docoff-react-base">
-const MyHello = ({name}) => (
-    <strong>Hello, {name}</strong>
-);
-      </textarea>
+      <p>This elements allows to define code that is common for all <code>docoff-react-preview</code> elements on the
+        given page. This is handy for defining code fragments susch as constants or placeholder React components that
+        can be used further on.</p>
+
+      <h3>Usage</h3>
+
+      <pre><code>
+&lt;textarea is=&quot;docoff-react-base&quot;&gt;
+// Your JS code here
+&lt;/textarea&gt;
+      </code></pre>
+
+      <h3>Examples</h3>
+
+      <pre><code>
+&lt;textarea is=&quot;docoff-react-base&quot;&gt;
+  const MyHello = ({name}) =&gt; (
+    &lt;strong&gt;Hello, {name}&lt;/strong&gt;
+  );
+&lt;/textarea&gt;
+      </code></pre>
 
       <textarea is="docoff-react-base">
-const MyButton = ({
-  label,
-  onClick,
-}) => (
-  <button onClick={onClick}>{label}</button>
+const MyHello = ({name}) => (
+  <strong>Hello, {name}</strong>
 );
       </textarea>
 
       <h2><code>docoff-react-preview</code></h2>
-      <p>This code renders the JSX</p>
+      <p>This element renders a live preview of JSX code.</p>
 
-      <h3>Single component</h3>
+      <h3>Usage</h3>
+
+      <p>We simply need to include it in the page:</p>
+      <pre><code>
+&lt;textarea is=&quot;docoff-react-preview&quot; data-css=&quot;/shadow.css&quot;&gt;
+  &lt;YourCustomJSX /&gt;
+&lt;/textarea&gt;
+      </code></pre>
+
+      <h3>Example</h3>
+
+      <h4>Single Component</h4>
+
       <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
       </textarea>
 
-      <h3>Multiple components</h3>
+      <h4>Multiple Components</h4>
       <textarea is="docoff-react-preview">
 <>
   <MyHello name="Igor" />
   <br />
-  <MyButton
-    label="Trigger alert"
-    onClick={() => alert('Alert!')}
-  />
+  <MyHello name="Mia" />
 </>
       </textarea>
 
-      <h3>Example with hooks</h3>
+      <h4>With Hooks</h4>
+
       <textarea is="docoff-react-preview">
 React.createElement(() => {
-  const [isActive, setIsActive] = React.useState(false);
+  const [name, setName] = React.useState('Igor');
+  const MyButton = ({
+    label,
+    onClick,
+  }) => (
+    <button onClick={onClick}>{label}</button>
+  );
+
   return (
     <>
-      <MyHello name="Igor" />
+      <MyHello name={name} />
       <br />
       <MyButton
-        label={isActive ? 'On' : 'Off'}
-        onClick={() => setIsActive(!isActive)}
+        label={'Swap name'}
+        onClick={() => setName(name === 'Igor' ? 'Mia' : 'Igor')}
       />
     </>
   );
@@ -81,34 +125,43 @@ React.createElement(() => {
       </textarea>
 
       <h2><code>docoff-react-props</code></h2>
-      <p>This code renders the component prop definition table.</p>
 
-      <h3>Include via relative URL with overloading</h3>
+      <p>This elements renders the component prop definition table.</p>
+      <p>The props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
+      <p>There are simple rules for loading props from multiple files:</p>
+      <ul>
+        <li>Files get processed sequentially
+        <li>The result of merging all previous files is used as base when merging in the current file</li>
+        <li>When a prop is not defined in the current file, it will not be present in the merge result</li>
+        <li>When a prop is defined in the current file, with docblock description of the prop type definition, the definition from current file will be used</li>
+        <li>When a prop default value is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used, but with the default value from the current file</li>
+        <li>When a prop is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used including default value</li>
+      </ul>
 
-      This code:
-      <textarea readonly rows="6">
-<docoff-react-props data-src="
-    /exampleJS/common.props.js
-    |/exampleJS/Greeting.js
-"></docoff-react-props>
-      </textarea>
+      <h3>Examples</h3>
 
-      Produces:
+      <h4>Relative URL with Overloading</h4>
+
+      <pre><code>
+&lt;docoff-react-props data-src=&quot;
+  /exampleJS/common.props.js
+  |/exampleJS/Greeting.js
+&quot;&gt;&lt;/docoff-react-props&gt;
+      </code></pre>
+
       <docoff-react-props data-src="
           /exampleJS/common.props.js
           |/exampleJS/Greeting.jsx
       "></docoff-react-props>
 
-      <h3>Include via absolute URL</h3>
+      <h4>Absolute URL</h4>
 
-      This code:
-      <textarea readonly rows="4">
-<docoff-react-props
-    data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx"
-></docoff-react-props>
-      </textarea>
+      <pre><code>
+&lt;docoff-react-props
+  data-src=&quot;https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx&quot;
+&gt;&lt;/docoff-react-props&gt;
+      </code></pre>
 
-      Produces:
       <docoff-react-props
           data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx"
       ></docoff-react-props>
