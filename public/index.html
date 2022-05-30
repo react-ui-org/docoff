@@ -91,12 +91,10 @@ const MyHello = ({name}) => (
       </textarea>
 
       <h4>Multiple Components</h4>
+
       <textarea is="docoff-react-preview">
-<>
-  <MyHello name="Igor" />
-  <br />
-  <MyHello name="Mia" />
-</>
+<MyHello name="Igor" />
+<MyHello name="Mia" />
       </textarea>
 
       <h4>With Hooks</h4>
@@ -114,7 +112,6 @@ React.createElement(() => {
   return (
     <>
       <MyHello name={name} />
-      <br />
       <MyButton
         label={'Swap name'}
         onClick={() => setName(name === 'Igor' ? 'Mia' : 'Igor')}
