@@ -1,0 +1,11 @@
+/.github
+/.idea
+/node_modules
+/public/exampleJS
+/public/index.html
+.editorconfig
+.eslintrc
+.gitignore
+babel.config.js
+package-lock.json
+webpack.config.babel.js
