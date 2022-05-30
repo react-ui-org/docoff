@@ -24,6 +24,7 @@ These components allow to create a live editable JSX component demo in browser.
     this library and can be loaded by the user in the desired version.
 3. `@babel/standalone` is loaded via CDN because that seems to be the only
     supported way.
+4. Components preview inherit page CSS. When using CSS-in-JS there is no easy away around this.
 
 
 ### Usage
@@ -38,10 +39,10 @@ In short, you need to:
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     ```
-2. Include package dependencies:
+2. Include code from this package:
     ```html
     <script src="/generated/bundle.js"></script>
-    <link type="text/css" rel="stylesheet" href="main.css" />
+    <link type="text/css" rel="stylesheet" href="/main.css" />
     ```
 3. Optionally define `docoff-react-base` elements with code that is to be common for all `docoff-react-preview` elements on the given page.
     ```html
