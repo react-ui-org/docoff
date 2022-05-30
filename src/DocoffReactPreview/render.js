@@ -1,5 +1,12 @@
 import Prism from 'prismjs';
 
+// Babel is provided by @babel/standalone loaded via CDN
+// eslint-disable-next-line no-undef
+const transformCode = (rawCode) => Babel.transform(rawCode, { presets: ['react'] })
+  .code
+  // `previewTransCode` includes ';' at the end, we let JS strip it
+  .slice(0, -1);
+
 export const render = (container, previewRawCode, baseRawCode) => {
   // Update the text overlay content
   // eslint-disable-next-line no-param-reassign
@@ -18,13 +25,14 @@ export const render = (container, previewRawCode, baseRawCode) => {
     const baseTransCode = Babel.transform(baseRawCode, { presets: ['react'] })
       .code;
 
-    // Babel is provided by @babel/standalone loaded via CDN
-    // If no code is entered we return an empty React.Fragment to prevent an error
-    // `previewTransCode` includes ';' at the end, we let JS strip it
-    // eslint-disable-next-line no-undef
-    const previewTransCode = Babel.transform(previewRawCode || '<></>', { presets: ['react'] })
-      .code
-      .slice(0, -1);
+    let previewTransCode;
+    try {
+      // If no code or multiple elements are entered we wrap code in `React.Fragment` to prevent an error
+      previewTransCode = transformCode(`<>${previewRawCode}</>`);
+    } catch (e) {
+      // If the code entered is not JSX we must attempt rendering without `React.Fragment`
+      previewTransCode = transformCode(previewRawCode);
+    }
 
     // We need to wrap the code in an anonymous function to scope constants/variables and
     // prevent variable redeclaration errors
