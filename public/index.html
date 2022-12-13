@@ -41,6 +41,8 @@
 
       <h1>Docoff Demo</h1>
 
+
+
       <h2><code>docoff-react-base</code></h2>
       <p>This elements allows to define code that is common for all <code>docoff-react-preview</code> elements on the
         given page. This is handy for defining code fragments susch as constants or placeholder React components that
@@ -85,15 +87,16 @@ const MyHello = ({name}) => (
       <h3>Example</h3>
 
       <h4>Single Component</h4>
-
-      <textarea is="docoff-react-preview">
+      <p>Custom CSS style sheet is used inside the shadow DOM.</p>
+      <textarea is="docoff-react-preview" data-css="/shadow.css">
 <MyHello name="Igor" />
       </textarea>
 
       <h4>Multiple Components</h4>
-
+      <p>No custom CSS style sheet is used inside the shadow DOM and default browser styles are used instead.</p>
       <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
+<br />
 <MyHello name="Mia" />
       </textarea>
 
@@ -112,6 +115,7 @@ React.createElement(() => {
   return (
     <>
       <MyHello name={name} />
+      <br />
       <MyButton
         label={'Swap name'}
         onClick={() => setName(name === 'Igor' ? 'Mia' : 'Igor')}
@@ -121,8 +125,9 @@ React.createElement(() => {
 });
       </textarea>
 
-      <h2><code>docoff-react-props</code></h2>
 
+
+      <h2><code>docoff-react-props</code></h2>
       <p>This elements renders the component prop definition table.</p>
       <p>The props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
       <p>There are simple rules for loading props from multiple files:</p>
@@ -163,6 +168,5 @@ React.createElement(() => {
           data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx"
       ></docoff-react-props>
 
-    </div>
   </body>
 </html>
