@@ -12,7 +12,7 @@ const PROP_DEF_COMPONENT = 'DocoffReactPropDefComponent';
 class DocoffReactProps extends HTMLElement {
   async connectedCallback() {
     // Parse the component URLs
-    const componentUrls = this.dataset.src
+    const componentUrls = this.attributes.src?.value
       .split('|')
       .map((url) => url.trim());
 
