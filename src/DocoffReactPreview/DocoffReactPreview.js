@@ -20,7 +20,7 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     this.setAttribute('data-gramm', 'false');
     this.setAttribute('spell-check', 'false');
 
-    const cssHref = this.dataset.css;
+    const cssHref = this.attributes.css?.value;
 
     const container = createRootContainer();
     const livePreview = createLivePreview(cssHref);
