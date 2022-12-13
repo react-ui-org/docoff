@@ -17,10 +17,6 @@
   border-bottom-right-radius: 0;
 }
 
-.docoff-LivePreview * {
-  margin: 4px
-}
-
 .docoff-Code {
   position: relative;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;

@@ -24,7 +24,7 @@ These components allow to create a live editable JSX component demo in browser.
     this library and can be loaded by the user in the desired version.
 3. `@babel/standalone` is loaded via CDN because that seems to be the only
     supported way.
-4. Components preview inherit page CSS. When using CSS-in-JS there is no easy away around this.
+4. Components preview are completely isolated inside a shadowDom from the page CSS styles.
 
 
 ### Usage

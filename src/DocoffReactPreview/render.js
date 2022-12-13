@@ -16,7 +16,11 @@ export const render = (container, previewRawCode, baseRawCode) => {
     'jsx',
   );
 
-  const viewElGetter = 'codeViewEl = document.currentScript.parentNode.querySelector(\'[data-type=preview]\')';
+  const viewElGetter = `codeViewEl = document.currentScript
+    .parentNode
+    .querySelector('[data-type=preview]')
+    .shadowRoot
+    .querySelector('div')`;
 
   let scriptText;
   try {
