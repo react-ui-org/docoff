@@ -2,47 +2,59 @@ import { CODE_EDITOR_CLASSNAME } from '../constants';
 import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
 import { createRootContainer } from '../_helpers/createRootContainer';
 import { createLivePreview } from './_helpers/createLivePreview';
+import { createStyle } from './_helpers/createStyle';
 import { render } from './render';
 
 class DocoffReactPreview extends HTMLTextAreaElement {
   connectedCallback() {
-    // We need to ensure that this Element will get initiated only once even if we move it around
+    // Ensure that this Element will get initiated only once even if we reattach it to DOM multiple times
     if (this.initiated) {
       return;
     }
     this.initiated = true;
 
-    this.classList.add(CODE_EDITOR_CLASSNAME);
+    // Read attributes
+    const cssHref = this.attributes.css?.value;
 
+    this.classList.add(CODE_EDITOR_CLASSNAME);
     this.autocapitalize = 'none';
     this.autocomplete = 'off';
     this.setAttribute('autocorrect', 'off');
     this.setAttribute('data-gramm', 'false');
     this.setAttribute('spell-check', 'false');
 
-    const cssHref = this.attributes.css?.value;
-
+    // Prepare DOM
     const container = createRootContainer();
-    const livePreview = createLivePreview(cssHref);
-    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
-
-    container.appendChild(livePreview);
-    container.appendChild(codeSyntaxHighlighter);
     this.parentNode.insertBefore(container, this);
 
+    const livePreview = createLivePreview(cssHref);
+    container.shadowRoot.appendChild(livePreview);
+
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
+    container.shadowRoot.appendChild(codeSyntaxHighlighter);
     codeSyntaxHighlighter.appendChild(this);
+
+    const style = createStyle();
+    container.shadowRoot.appendChild(style);
 
     // Loop through all `docoff-react-base` elements on page.
     // They must be placed before any `docoff-react-preview` elements otherwise they would not be parsed yet.
     const baseRawCode = Array.prototype.reduce.call(
-      document.querySelectorAll('textarea[is=docoff-react-base]'),
-      (agg, content) => `${agg}${content.value.trim()}`,
+      document.querySelectorAll('[data-type="reactBase"]'),
+      (agg, reactBaseEl) =>{
+        const code = reactBaseEl
+          .shadowRoot
+          .querySelector('textarea')
+          .value
+          .trim();
+        return `${agg}${code}`;
+      },
       '',
     );
 
     // Ensures that the size of `<textarea>` and `textOverlay` is the same and correct
     const setHeight = () => {
-      const textOverlay = container.querySelector('[data-type=textOverlay]');
+      const textOverlay = container.shadowRoot.querySelector('[data-type=textOverlay]');
 
       // First shrink it
       this.style.height = 'auto';
@@ -55,7 +67,7 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     };
 
     // Removes white space, renders and adjusts height
-    // No content can mean the HTML has not been parsed yet and we must not update anything in such case
+    // No content can mean the HTML has not been parsed yet, and we must not update anything in such case
     const initialRender = () => {
       const previewRawCode = this.value.trim();
       if (previewRawCode) {
@@ -76,6 +88,11 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     this.addEventListener('input', () => {
       render(container, this.value, baseRawCode);
       setHeight();
+    });
+
+    // Synchronize horizontal scrolling between textarea and syntaxHighlighter
+    this.addEventListener('scroll', () => {
+      codeSyntaxHighlighter.firstChild.scrollLeft = this.scrollLeft;
     });
   }
 }

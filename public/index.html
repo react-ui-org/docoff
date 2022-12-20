@@ -41,30 +41,37 @@
 
       <h1>Docoff Demo</h1>
 
+      <p>Styles used in this demo:</p>
+      <ul>
+        <li><code>/shadow.css</code> Sets all text inside preview to be red and monospaced.</li>
+        <li><code>/main.css</code> Sets CSS custom properties including location of the <code>/shadow.css</code></li>
+      </ul>
 
+      <p>Feel free to inspect them in dev tools!</p>
 
       <h2><code>docoff-react-base</code></h2>
-      <p>This elements allows to define code that is common for all <code>docoff-react-preview</code> elements on the
+
+      <p><code>&ltdocoff-react-base&gt;</code> allows to define code that is common for all <code>docoff-react-preview</code> elements on the
         given page. This is handy for defining code fragments susch as constants or placeholder React components that
         can be used further on.</p>
 
       <h3>Usage</h3>
 
+      <h4>Pure HTML</h4>
       <pre><code>
 &lt;textarea is=&quot;docoff-react-base&quot;&gt;
 // Your JS code here
 &lt;/textarea&gt;
       </code></pre>
 
-      <h3>Examples</h3>
-
+      <h4>Markdown</h4>
       <pre><code>
-&lt;textarea is=&quot;docoff-react-base&quot;&gt;
-  const MyHello = ({name}) =&gt; (
-    &lt;strong&gt;Hello, {name}&lt;/strong&gt;
-  );
-&lt;/textarea&gt;
+```docoff-react-base
+// Your JS code here
+```
       </code></pre>
+
+      <h3>Example</h3>
 
       <textarea is="docoff-react-base">
 const MyHello = ({name}) => (
@@ -73,27 +80,33 @@ const MyHello = ({name}) => (
       </textarea>
 
       <h2><code>docoff-react-preview</code></h2>
-      <p>This element renders a live preview of JSX code.</p>
+
+      <p><code>&ltdocoff-react-preview&gt;</code> renders a live preview of JSX code.</p>
 
       <h3>Usage</h3>
 
-      <p>We simply need to include it in the page:</p>
+      <h4>Pure HTML</h4>
       <pre><code>
 &lt;textarea is=&quot;docoff-react-preview&quot; css=&quot;/shadow.css&quot;&gt;
   &lt;YourCustomJSX /&gt;
 &lt;/textarea&gt;
       </code></pre>
 
+      <h4>Markdown</h4>
+      <pre><code>
+```docoff-react-base
+// Your JS code here
+```
+      </code></pre>
+
       <h3>Example</h3>
 
       <h4>Single Component</h4>
-      <p>Custom CSS style sheet is used inside the shadow DOM.</p>
-      <textarea is="docoff-react-preview" css="/shadow.css">
+      <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
       </textarea>
 
       <h4>Multiple Components</h4>
-      <p>No custom CSS style sheet is used inside the shadow DOM and default browser styles are used instead.</p>
       <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
 <br />
@@ -128,7 +141,8 @@ React.createElement(() => {
 
 
       <h2><code>docoff-react-props</code></h2>
-      <p>This elements renders the component prop definition table.</p>
+
+      <p><code>&ltdocoff-react-props&gt;</code> renders the component prop definition table.</p>
       <p>The props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
       <p>There are simple rules for loading props from multiple files:</p>
       <ul>
@@ -141,70 +155,58 @@ React.createElement(() => {
       </ul>
 
       <h3>Examples</h3>
+      <p>Using <code>docoff-react-preview</code> :)</p>
 
       <h4>Relative URL with Overloading</h4>
 
-      <pre><code>
-&lt;docoff-react-props src=&quot;
-  /exampleJS/common.props.js
-  |/exampleJS/Greeting.js
-&quot;&gt;&lt;/docoff-react-props&gt;
-      </code></pre>
-
-      <docoff-react-props src="
-          /exampleJS/common.props.js
-          |/exampleJS/Greeting.jsx
-      "></docoff-react-props>
+      <textarea is="docoff-react-preview">
+<docoff-react-props src="
+    /exampleJS/common.props.js
+    |/exampleJS/Greeting.jsx
+"></docoff-react-props>
+      </textarea>
 
       <h4>Absolute URL</h4>
 
-      <pre><code>
-&lt;docoff-react-props
-  src=&quot;https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx&quot;
-&gt;&lt;/docoff-react-props&gt;
-      </code></pre>
-
-      <docoff-react-props
-          src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx"
-      ></docoff-react-props>
+      <textarea is="docoff-react-preview">
+<docoff-react-props
+    src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/SelectField/SelectField.jsx"
+></docoff-react-props>
+      </textarea>
 
 
 
       <h2><code>docoff-placeholder</code></h2>
+
       <code>&ltdocoff-placeholder&gt;</code> renders a placeholder that can be used in code examples.
 
-      <pre><code>
-&lt;docoff-placeholder bordered&gt;&lt;/docoff-placeholder&gt;
-      </code></pre>
-      <docoff-placeholder bordered></docoff-placeholder>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder bordered></docoff-placeholder>
+      </textarea>
 
       <h3>Children</h3>
       <p>Children can be inserted</p>
-      <pre><code>
-&lt;docoff-placeholder&gt;Hello&lt;/docoff-react-props&gt;
-      </code></pre>
-      <docoff-placeholder bordered>Hello</docoff-placeholder>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder bordered>Hello</docoff-placeholder>
+      </textarea>
 
       <h3>Color</h3>
       <p>It can be rendered dark</p>
-      <pre><code>
-&lt;docoff-placeholder dark&gt;&lt;/docoff-placeholder&gt;
-      </code></pre>
-      <docoff-placeholder dark></docoff-placeholder>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder dark></docoff-placeholder>
+      </textarea>
 
       <h3>Size</h3>
       <p>Size can be set using any valid css units</p>
-      <pre><code>
-&lt;docoff-placeholder width="50px" height="50px" bordered&gt;&lt;/docoff-react-props&gt;
-      </code></pre>
-      <docoff-placeholder width="50px" height="50px" bordered></docoff-placeholder>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder width="50px" height="50px" bordered></docoff-placeholder>
+      </textarea>
 
       <h3>Layout</h3>
       <p>It can be rendered inline</p>
-      <pre><code>
-&lt;docoff-placeholder inline bordered&gt;&lt;/docoff-react-props&gt;
-      </code></pre>
-      Inline <docoff-placeholder inline bordered></docoff-placeholder>
+      <textarea is="docoff-react-preview">
+Inline <docoff-placeholder inline bordered></docoff-placeholder>
+      </textarea>
     </div>
 
   </body>

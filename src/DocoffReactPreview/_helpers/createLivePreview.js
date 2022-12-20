@@ -9,21 +9,37 @@ export const createLivePreview = (cssHref) => {
   livePreview.attachShadow({ mode: 'open' });
 
   const styles = document.createElement('style');
-  styles.innerText = `:host {
-    all: initial;
-    display: block;
-  }`;
+  styles.innerText = `
+    /* Reset all styles coming from parent DOM */
+    :host {
+      all: initial;
+      display: block;
+    }
+
+    /* Configure live preview presentation */
+    body {
+     margin: 0;
+    }
+    body > div {
+     padding: var(--docoff-preview-padding);
+    }
+    body > div > * {
+     margin: var(--docoff-preview-children-margin);
+    }
+  `;
   livePreview.shadowRoot.appendChild(styles);
 
-  if (cssHref != null) {
+  // Add custom preview CSS link
+  const previewCss = window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-css');
+  if (previewCss) {
     const cssLink = document.createElement('link');
     cssLink.rel = 'stylesheet';
     cssLink.type = 'text/css';
-    cssLink.href = cssHref;
+    cssLink.href = previewCss;
     livePreview.shadowRoot.appendChild(cssLink);
   }
 
-  // We need to add body so styles declared on body take effect
+  // Add <html> and <body> so that might be declared on them in custom preview CSS can take effect
   const contentHtml = document.createElement('html');
   livePreview.shadowRoot.appendChild(contentHtml);
   const contentBody = document.createElement('body');

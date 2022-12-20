@@ -7,3 +7,21 @@ customElements.define('docoff-react-preview', DocoffReactPreview, { extends: 'te
 customElements.define('docoff-react-base', DocoffReactBase, { extends: 'textarea' });
 customElements.define('docoff-react-props', DocoffReactProps);
 customElements.define('docoff-placeholder', DocoffPlaceholder);
+
+// For comfortable usage in Markdown any `<code>` elements with class `language-docoff-*`
+// get replaced by the respective custom elements
+document.addEventListener('DOMContentLoaded', () => {
+  [
+    'docoff-react-base',
+    'docoff-react-preview',
+  ].forEach((elName) => {
+    document.querySelectorAll(`code.language-${elName}`).forEach((el) => {
+      const base = document.createElement('textarea', { is: elName });
+      const preNode = el.parentNode;
+
+      base.innerHTML = el.innerHTML;
+      preNode.parentNode.insertBefore(base, preNode);
+      preNode.remove();
+    });
+  });
+});

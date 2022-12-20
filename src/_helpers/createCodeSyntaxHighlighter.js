@@ -11,6 +11,7 @@ export const createCodeSyntaxHighlighter = () => {
   codeSyntaxHighlighterCode.dataset.type = 'textOverlay';
   codeSyntaxHighlighterCode.classList.add('language-jsx');
   codeSyntaxHighlighterPre.append(codeSyntaxHighlighterCode);
+  codeSyntaxHighlighterPre.classList.add('language-jsx');
   codeSyntaxHighlighterPre.classList.add(CODE_SYNTAX_HIGHLIGHTER_CLASSNAME);
   codeSyntaxHighlighterDiv.append(codeSyntaxHighlighterPre);
   codeSyntaxHighlighterDiv.classList.add(CODE_WRAPPER_CLASSNAME);

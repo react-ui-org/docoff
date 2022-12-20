@@ -8,19 +8,18 @@ class DocoffPlaceholder extends HTMLElement {
     const width = this.attributes.width?.value;
 
     // Render the output
-    const rootEl = this;
     if (bordered) {
-      rootEl.style.border = '2px dashed #ccc';
+      this.style.border = '2px dashed #ccc';
     }
-    rootEl.style.display = 'block';
-    rootEl.style['background-color'] = dark ? '#4d4d4d' : '#fff';
-    rootEl.style.height = height || 'auto';
-    rootEl.style.padding = '0.75rem';
+    this.style.display = 'block';
+    this.style['background-color'] = dark ? '#4d4d4d' : '#fff';
+    this.style.height = height || 'auto';
+    this.style.padding = '0.75rem';
     if (inline) {
-      rootEl.style.display = 'inline-flex';
-      rootEl.style['vertical-align'] = ['middle'];
+      this.style.display = 'inline-flex';
+      this.style['vertical-align'] = ['middle'];
     }
-    rootEl.style.width = width || 'auto';
+    this.style.width = width || 'auto';
   }
 }
 

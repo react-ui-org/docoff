@@ -5,22 +5,34 @@ import { CODE_EDITOR_CLASSNAME } from '../constants';
 
 class DocoffReactBase extends HTMLTextAreaElement {
   connectedCallback() {
+    // Ensure that this Element will get initiated only once even if we reattach it to DOM multiple times
+    if (this.initiated) {
+      return;
+    }
+    this.initiated = true;
+
     this.readOnly = true;
     this.classList.add(CODE_EDITOR_CLASSNAME);
 
     const container = createRootContainer();
-    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
-    container.appendChild(codeSyntaxHighlighter);
+
+    // Add data- attribute to allow DocoffReactPreview to query all base elements
+    container.dataset.type = 'reactBase';
+
     this.parentNode.insertBefore(container, this);
 
+    const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
+    container.shadowRoot.appendChild(codeSyntaxHighlighter);
+    codeSyntaxHighlighter.appendChild(this);
+
     const initialRender = () => {
+      // Remove white space if there is any content.
       const baseRawCode = this.value.trim();
 
-      // Remove white space if there is any content.
-      // No content can mean the HTML was not parsed yet and we must not update anything in such case
+      // No content can mean the HTML was not parsed yet, and we must not update anything in such case
       if (baseRawCode) {
         this.value = baseRawCode;
-        container.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
+        container.shadowRoot.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
           baseRawCode,
           Prism.languages.javascript,
           'javascript',
@@ -38,6 +50,11 @@ class DocoffReactBase extends HTMLTextAreaElement {
 
     // Run when the polyfill is loaded
     initialRender();
+
+    // Synchronize horizontal scrolling between textarea and syntaxHighlighter
+    this.addEventListener('scroll', () => {
+      codeSyntaxHighlighter.firstChild.scrollLeft = this.scrollLeft;
+    });
   }
 }
 

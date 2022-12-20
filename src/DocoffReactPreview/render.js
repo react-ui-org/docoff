@@ -10,14 +10,16 @@ const transformCode = (rawCode) => Babel.transform(rawCode, { presets: ['react']
 export const render = (container, previewRawCode, baseRawCode) => {
   // Update the text overlay content
   // eslint-disable-next-line no-param-reassign
-  container.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
+  container.shadowRoot.querySelector('[data-type=textOverlay]').innerHTML = Prism.highlight(
     previewRawCode,
     Prism.languages.jsx,
     'jsx',
   );
 
+  // We need to be able to get a reference to the element where react is to be mounted.
   const viewElGetter = `codeViewEl = document.currentScript
-    .parentNode
+    .nextSibling
+    .shadowRoot
     .querySelector('[data-type=preview]')
     .shadowRoot
     .querySelector('div')`;
@@ -26,7 +28,8 @@ export const render = (container, previewRawCode, baseRawCode) => {
   try {
     // Babel is provided by @babel/standalone loaded via CDN
     // eslint-disable-next-line no-undef
-    const baseTransCode = Babel.transform(baseRawCode, { presets: ['react'] })
+    const baseTransCode = Babel
+      .transform(baseRawCode, { presets: ['react'] })
       .code;
 
     let previewTransCode;
@@ -64,7 +67,7 @@ export const render = (container, previewRawCode, baseRawCode) => {
   // First we add the script to modify the DOM
   const codeRun = document.createElement('script');
   codeRun.innerHTML = scriptText;
-  container.append(codeRun);
+  container.parentNode.insertBefore(codeRun, container);
 
   // Then we remove the script that already run
   codeRun.remove();

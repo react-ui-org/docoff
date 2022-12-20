@@ -13,7 +13,7 @@ module.exports = {
     ['prismjs', {
       languages: ['javascript', 'jsx'],
       theme: 'twilight',
-      css: true
+      css: false
     }]
   ]
 };
