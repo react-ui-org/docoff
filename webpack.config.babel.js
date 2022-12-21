@@ -6,6 +6,7 @@ const MAX_OUTPUT_SIZE_KB = 1600000;
 
 module.exports = (env, argv) => ({
   devServer: {
+    allowedHosts: ['all'],
     headers: {},
     historyApiFallback: true,
     static: Path.join(__dirname, 'public'),
@@ -32,12 +33,13 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin({
-      minify: TerserPlugin.uglifyJsMinify,
-    })],
-  },
+  // Disabled, because `uglify-js` causes `react-docgen` to fail in Safari browser
+  // optimization: {
+  //   minimize: true,
+  //   // minimizer: [new TerserPlugin({
+  //   //   minify: TerserPlugin.uglifyJsMinify,
+  //   // })],
+  // },
   output: {
     filename: '[name].js?v=__ASSET_VERSION__',
     path: Path.join(__dirname, 'public/generated'),
