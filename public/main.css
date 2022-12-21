@@ -12,9 +12,9 @@
 
   /*
     The Prism theme CSS file
-    For options see: https://unpkg.com/browse/prismjs@1.29.0/themes/
+    For options see: https://unpkg.com/browse/prismjs/themes/
    */
-  --docoff-prism-css: https://unpkg.com/prismjs@1.29.0/themes/prism-twilight.min.css;
+  --docoff-prism-css: https://unpkg.com/prismjs@1.29/themes/prism-twilight.min.css;
 
   /*
     Custom preview CSS file
