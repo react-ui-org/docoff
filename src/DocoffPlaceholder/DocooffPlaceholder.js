@@ -1,25 +1,28 @@
-class DocoffPlaceholder extends HTMLElement {
-  async connectedCallback() {
-    // Parse attributes
-    const bordered = !!this.attributes.bordered;
-    const dark = !!this.attributes.dark;
-    const height = this.attributes.height?.value;
-    const inline = !!this.attributes.inline;
-    const width = this.attributes.width?.value;
+import { getStyle } from './_helpers/getStyle';
 
-    // Render the output
-    if (bordered) {
-      this.style.border = '2px dashed #ccc';
+class DocoffPlaceholder extends HTMLElement {
+  static get observedAttributes() {
+    return ['bordered', 'dark', 'height', 'inline', 'width'];
+  }
+
+  async connectedCallback() {
+    const attributes = this.getAttributeValues();
+    Object.assign(this.style, getStyle(attributes));
+  }
+
+  attributeChangedCallback() {
+    const attributes = this.getAttributeValues();
+    Object.assign(this.style, getStyle(attributes));
+  }
+
+  getAttributeValues() {
+    return {
+      bordered: !!this.attributes.bordered,
+      dark: !!this.attributes.dark,
+      height: this.attributes.height?.value,
+      inline: !!this.attributes.inline,
+      width: this.attributes.width?.value,
     }
-    this.style.display = 'block';
-    this.style['background-color'] = dark ? '#4d4d4d' : '#fff';
-    this.style.height = height || 'auto';
-    this.style.padding = '0.75rem';
-    if (inline) {
-      this.style.display = 'inline-flex';
-      this.style['vertical-align'] = ['middle'];
-    }
-    this.style.width = width || 'auto';
   }
 }
 

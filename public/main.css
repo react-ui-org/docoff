@@ -3,6 +3,10 @@
   --docoff-border-color: rgb(206, 212, 222);
   --docoff-border-radius: 0.35em;
   --docoff-background-color: rgba(179, 179, 179, 0.1);
+  --docoff-placeholder-background-dark: #4d4d4d;
+  --docoff-placeholder-background-light: #fff;
+  --docoff-placeholder-border-color: #ccc;
+  --docoff-placeholder-border-width: 2px;
 
   /* To simplify multiple component presentation we add margin to all top level elements*/
   --docoff-preview-children-margin: 0.25em;
