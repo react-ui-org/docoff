@@ -1,7 +1,7 @@
 {
   "name": "@react-ui-org/docoff",
   "description": "Library of custom HTML elements for creating flexible and simple to use `React.Component` documentation",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "keywords": [
     "react",
     "documentation",
