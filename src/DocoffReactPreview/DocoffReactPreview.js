@@ -94,6 +94,10 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     this.addEventListener('scroll', () => {
       codeSyntaxHighlighter.firstChild.scrollLeft = this.scrollLeft;
     });
+
+    // Prevent keyDown events from bubbling when editing text
+    this.addEventListener('keydown', (e) => e.stopPropagation());
+    this.addEventListener('keyup', (e) => e.stopPropagation());
   }
 }
 
