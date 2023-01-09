@@ -28,7 +28,7 @@ export const getPropsTable = async (componentUrls) => {
       docgenParseOptions,
     );
   }));
-      console.log(componentInfos)
+
   if (componentInfos.includes(undefined)) {
     const errMessage = document.createElement('div');
     errMessage.innerText = 'Resources could not be downloaded.';
