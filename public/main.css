@@ -1,28 +1,29 @@
 :root {
-  /* Visual configuration */
-  --docoff-border-color: rgb(206, 212, 222);
-  --docoff-border-radius: 0.35em;
-  --docoff-background-color: rgba(179, 179, 179, 0.1);
+  /* Visual configuration of the `<docoff-react-preview>` and `<docoff-react-base>` code */
+  /* The Prism theme CSS file, for options see: https://unpkg.com/browse/prismjs/themes/ */
+  --docoff-code-prism-css: https://unpkg.com/prismjs@1.29/themes/prism-twilight.min.css;
+  --docoff-code-font-size: 1em;
+  --docoff-code-line-height: 1.5;
+  --docoff-code-font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+
+
+  /* Visual configuration of the `<docoff-react-preview>` live preview */
+  --docoff-preview-border-color: rgb(206, 212, 222);
+  --docoff-preview-border-radius: 0.35em;
+  /* To simplify multiple component presentation we add margin to all top level elements*/
+  --docoff-preview-children-margin: 0.25em;
+  /* To improve component presentation we add padding inside the shadow DOM */
+  --docoff-preview-padding: 1em;
+  /*Custom preview CSS file, typically this would be the CSS of your component */
+  --docoff-preview-css: /shadow.css;
+
+
+  /* Visual configuration of the `<docoff-placeholder>` element */
   --docoff-placeholder-background-dark: #4d4d4d;
   --docoff-placeholder-background-light: #fff;
   --docoff-placeholder-border-color: #ccc;
   --docoff-placeholder-border-width: 2px;
 
-  /* To simplify multiple component presentation we add margin to all top level elements*/
-  --docoff-preview-children-margin: 0.25em;
 
-  /* To improve component presentation we add padding inside the shadow DOM */
-  --docoff-preview-padding: 1em;
 
-  /*
-    The Prism theme CSS file
-    For options see: https://unpkg.com/browse/prismjs/themes/
-   */
-  --docoff-prism-css: https://unpkg.com/prismjs@1.29/themes/prism-twilight.min.css;
-
-  /*
-    Custom preview CSS file
-    Typically this would be the CSS of your component
-   */
-  --docoff-preview-css: /shadow.css;
 }

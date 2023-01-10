@@ -14,8 +14,6 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     this.initiated = true;
 
     // Read attributes
-    const cssHref = this.attributes.css?.value;
-
     this.classList.add(CODE_EDITOR_CLASSNAME);
     this.autocapitalize = 'none';
     this.autocomplete = 'off';
@@ -27,7 +25,7 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     const container = createRootContainer();
     this.parentNode.insertBefore(container, this);
 
-    const livePreview = createLivePreview(cssHref);
+    const livePreview = createLivePreview();
     container.shadowRoot.appendChild(livePreview);
 
     const codeSyntaxHighlighter = createCodeSyntaxHighlighter();
@@ -41,7 +39,7 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     // They must be placed before any `docoff-react-preview` elements otherwise they would not be parsed yet.
     const baseRawCode = Array.prototype.reduce.call(
       document.querySelectorAll('[data-type="reactBase"]'),
-      (agg, reactBaseEl) =>{
+      (agg, reactBaseEl) => {
         const code = reactBaseEl
           .shadowRoot
           .querySelector('textarea')

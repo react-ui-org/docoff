@@ -1,12 +1,12 @@
 export const createStyle = () => {
   const styles = document.createTextNode(`
     .docoff-LivePreview {
-      border: 1px solid var(--docoff-border-color);
+      border: 1px solid var(--docoff-preview-border-color);
+      border-radius: var(--docoff-preview-border-radius);
       border-bottom-style: none;
-      border-radius: var(--docoff-border-radius);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
-      background-color: var(--docoff-background-color);
+      overflow: hidden;
     }
 
     [class*="language-"].docoff-Code__syntaxHighlighter {

@@ -1,6 +1,6 @@
 import { LIVE_PREVIEW_CLASSNAME } from '../../constants';
 
-export const createLivePreview = (cssHref) => {
+export const createLivePreview = () => {
   const livePreview = document.createElement('div');
 
   livePreview.dataset.type = 'preview';
@@ -18,13 +18,13 @@ export const createLivePreview = (cssHref) => {
 
     /* Configure live preview presentation */
     body {
-     margin: 0;
+      margin: 0;
     }
     body > div {
-     padding: var(--docoff-preview-padding);
+      padding: var(--docoff-preview-padding);
     }
     body > div > * {
-     margin: var(--docoff-preview-children-margin);
+      margin: var(--docoff-preview-children-margin);
     }
   `;
   livePreview.shadowRoot.appendChild(styles);

@@ -69,5 +69,5 @@ export const getPropsTable = async (componentUrls) => {
     table.append(row);
   });
 
-  return table
-}
+  return table;
+};

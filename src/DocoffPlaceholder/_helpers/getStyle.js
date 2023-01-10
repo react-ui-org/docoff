@@ -6,7 +6,7 @@ export const getStyle = (attributes) => {
     height: attributes.height || 'auto',
     padding: '0.75rem',
     width: attributes.width || 'auto',
-  }
+  };
 
   if (attributes.bordered) {
     const borderColor = window.getComputedStyle(document.body).getPropertyValue('--docoff-placeholder-border-color');

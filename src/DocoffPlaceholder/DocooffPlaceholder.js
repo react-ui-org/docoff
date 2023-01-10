@@ -22,7 +22,7 @@ class DocoffPlaceholder extends HTMLElement {
       height: this.attributes.height?.value,
       inline: !!this.attributes.inline,
       width: this.attributes.width?.value,
-    }
+    };
   }
 }
 

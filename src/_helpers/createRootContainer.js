@@ -1,4 +1,4 @@
-import { PRISM_CSS_URL, ROOT_CLASSNAME } from '../constants';
+import { ROOT_CLASSNAME } from '../constants';
 
 export const createRootContainer = () => {
   const container = document.createElement('div');
@@ -9,7 +9,7 @@ export const createRootContainer = () => {
   const prismCss = document.createElement('link');
   prismCss.rel = 'stylesheet';
   prismCss.type = 'text/css';
-  prismCss.href = window.getComputedStyle(document.body).getPropertyValue('--docoff-prism-css');
+  prismCss.href = window.getComputedStyle(document.body).getPropertyValue('--docoff-code-prism-css');
   container.shadowRoot.appendChild(prismCss);
 
   // Add Component styling
@@ -21,9 +21,9 @@ export const createRootContainer = () => {
 
     .docoff-Code {
       position: relative;
-      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-      font-size: 1em;
-      line-height: 1.5;
+      font-family: var(--docoff-code-font-family);
+      font-size: var(--docoff-code-font-size);
+      line-height: var(--docoff-code-line-height);
       color: lightblue;
     }
 
@@ -55,7 +55,7 @@ export const createRootContainer = () => {
       z-index: 1;
       margin-block: 0;
       border: none;
-      border-radius: var(--docoff-border-radius);
+      border-radius: var(--docoff-preview-border-radius);
       font: inherit;
       pointer-events: none;
       overflow: hidden;
