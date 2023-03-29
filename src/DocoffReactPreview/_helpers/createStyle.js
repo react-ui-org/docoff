@@ -1,6 +1,8 @@
 export const createStyle = () => {
   const styles = document.createTextNode(`
     .docoff-LivePreview {
+      position: relative;
+      z-index: 2;
       border: 1px solid var(--docoff-preview-border-color);
       border-radius: var(--docoff-preview-border-radius);
       border-bottom-style: none;
