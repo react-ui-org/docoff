@@ -60,6 +60,10 @@ export const createRootContainer = () => {
       pointer-events: none;
       overflow: hidden;
     }
+    
+    [class*="language-"].docoff-Code__syntaxHighlighter > code[class*="language-"] {
+      font: inherit;
+    }
   `);
   const style = document.createElement('style');
   style.appendChild(styles);
