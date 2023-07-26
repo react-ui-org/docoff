@@ -49,5 +49,9 @@ export const createLivePreview = () => {
   const contentRoot = document.createElement('div');
   contentBody.appendChild(contentRoot);
 
+  // Prevent keyDown events from bubbling when editing text (e.g. in an `<input>` field)
+  livePreview.addEventListener('keydown', (e) => e.stopPropagation());
+  livePreview.addEventListener('keyup', (e) => e.stopPropagation());
+
   return livePreview;
 };
