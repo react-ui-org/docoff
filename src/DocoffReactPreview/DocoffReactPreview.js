@@ -15,11 +15,9 @@ class DocoffReactPreview extends HTMLTextAreaElement {
 
     // Read attributes
     this.classList.add(CODE_EDITOR_CLASSNAME);
-    this.autocapitalize = 'none';
-    this.autocomplete = 'off';
-    this.setAttribute('autocorrect', 'off');
-    this.setAttribute('data-gramm', 'false');
-    this.setAttribute('spell-check', 'false');
+    this.setAttribute('autocomplete', 'off');
+    this.setAttribute('autocapitalize', 'off');
+    this.setAttribute('spellcheck', 'false');
 
     // Prepare DOM
     const container = createRootContainer();
