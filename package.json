@@ -29,6 +29,7 @@
     "npm": ">=8.5.1"
   },
   "dependencies": {
+    "@swc/wasm-web": "^1.6.7",
     "@ungap/custom-elements": "^1.0.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",

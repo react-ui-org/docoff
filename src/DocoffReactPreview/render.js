@@ -1,11 +1,6 @@
+import { transformSync } from '@swc/wasm-web';
 import Prism from 'prismjs';
-
-// Babel is provided by @babel/standalone loaded via CDN
-// eslint-disable-next-line no-undef
-const transformCode = (rawCode) => Babel.transform(rawCode, { presets: ['react'] })
-  .code
-  // `previewTransCode` includes ';' at the end, we let JS strip it
-  .slice(0, -1);
+import { getSwcTransformOptions } from './getSwcTransformOptions';
 
 export const render = (container, previewRawCode, baseRawCode) => {
   // Update the text overlay content
@@ -17,38 +12,32 @@ export const render = (container, previewRawCode, baseRawCode) => {
   );
 
   // We need to be able to get a reference to the element where react is to be mounted.
-  const viewElGetter = `codeViewEl = document.currentScript
-    .nextSibling
-    .shadowRoot
-    .querySelector('[data-type=preview]')
-    .shadowRoot
-    .querySelector('div')`;
+  const viewElGetter = `
+    codeViewEl = document.currentScript
+      .nextSibling
+      .shadowRoot
+      .querySelector('[data-type=preview]')
+      .shadowRoot
+      .querySelector('div');
+  `;
 
   let scriptText;
   try {
-    // Babel is provided by @babel/standalone loaded via CDN
-    // eslint-disable-next-line no-undef
-    const baseTransCode = Babel
-      .transform(baseRawCode, { presets: ['react'] })
-      .code;
+    const swcTransformOptions = getSwcTransformOptions();
+    const baseTransCode = transformSync(baseRawCode, swcTransformOptions).code;
 
-    let previewTransCode;
-    try {
-      // If no code or multiple elements are entered we wrap code in `React.Fragment` to prevent an error
-      previewTransCode = transformCode(`<>${previewRawCode}</>`);
-    } catch (e) {
-      // If the code entered is not JSX we must attempt rendering without `React.Fragment`
-      previewTransCode = transformCode(previewRawCode);
-    }
+    // We need to wrap the previewRawCode in a function as SWC can prepend inline some helpers functions
+    // The `previewCodeGetter` function allows us to execute the desired code
+    // Helpers are inserted based on the `target` option, set it to `es5` to see them
+    const previewTransCode = transformSync(`const previewCodeGetter = () => ${previewRawCode}`, swcTransformOptions).code;
 
-    // We need to wrap the code in an anonymous function to scope constants/variables and
-    // prevent variable redeclaration errors
     scriptText = `
       (() => {
         ${baseTransCode}
         ${viewElGetter}
         try {
-          ReactDOM.render(${previewTransCode}, codeViewEl);
+          ${previewTransCode};
+          ReactDOM.render(previewCodeGetter(), codeViewEl);
         } catch (e) {
           ReactDOM.unmountComponentAtNode(codeViewEl);
           codeViewEl.innerText = e.message;
@@ -56,11 +45,15 @@ export const render = (container, previewRawCode, baseRawCode) => {
       })();
     `;
   } catch (e) {
-    // The `e.message` can be multiline, so we need to use backticks (`).
+    const errorText = e.message
+      ? e.message.replaceAll('`', '\\`')
+      : 'Unknown error';
+
+    // The `e.message` can be multiline, so we need to use backticks (`) around `errorText`.
     scriptText = `
       ${viewElGetter}
       ReactDOM.unmountComponentAtNode(codeViewEl);
-      codeViewEl.innerText = \`${e.message}\`;
+      codeViewEl.innerText = \`Compilation error: ${errorText}\`;
     `;
   }
 

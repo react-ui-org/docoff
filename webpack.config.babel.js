@@ -10,6 +10,11 @@ module.exports = (env, argv) => ({
     headers: {},
     historyApiFallback: true,
     static: Path.join(__dirname, 'public'),
+
+    // This allows loading the `*.js` and `*.wasm` files into other pages thus making development and testing easier
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   },
   devtool: argv.mode === 'development'
       ? 'eval-cheap-module-source-map'
