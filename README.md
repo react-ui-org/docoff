@@ -35,7 +35,6 @@ In short, you need to:
 
 1. Include dependencies from CDN:
     ```html
-    <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     ```
@@ -104,7 +103,7 @@ To render props of a single React.Component:
     ```
 2. Use component the `<docoff-react-props>` element:
     ```html
-    <docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/CheckboxField/CheckboxField.jsx"></docoff-react-props>
+    <docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/components/CheckboxField/CheckboxField.jsx"></docoff-react-props>
     ```
 
 #### Props with Inheritance
@@ -155,15 +154,17 @@ To use this component:
 
 ### Native
 
-**Run locally**: `npm start`
+**Run locally:** `npm start`
 
-**Build**: `npm run build`
+**Build:** `npm run build`
 
-**Test**: `npm test`
+**Test:** `npm test`
 
 ### Using Docker
 
-**Run locally**: `docker compose up dev_server`
+**Run locally:** `docker compose up dev_server`
+
+**Open shell (access to `npm` etc.):** `docker compose run --rm node_shell`
 
 
 

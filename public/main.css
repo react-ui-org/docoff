@@ -17,6 +17,13 @@
   /*Custom preview CSS file, typically this would be the CSS of your component */
   --docoff-preview-css: /shadow.css;
 
+  /* The target ES version used by SWC when transpiling code. If undefined or empty, it defaults to the ES6 */
+  --docoff-preview-es-target: es6;
+
+  /* The path from where the swc WASM module gets loaded */
+  /* The value should match the source of the `bundle.js` */
+  /* Ideally, this should be done automatically, but that is not possible without loading @swc/wasm-web as an ES module */
+  --docoff-preview-wasm-path: /generated/880c4499646a7ec607d7.wasm;
 
   /* Visual configuration of the `<docoff-placeholder>` element */
   --docoff-placeholder-background-dark: #4d4d4d;

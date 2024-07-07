@@ -14,7 +14,6 @@
     />
     <link type="text/css" rel="stylesheet" href="/main.css" />
 
-    <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
@@ -108,9 +107,11 @@ const MyHello = ({name}) => (
 
       <h4>Multiple Components</h4>
       <textarea is="docoff-react-preview">
-<MyHello name="Igor" />
-<br />
-<MyHello name="Mia" />
+<>
+  <MyHello name="Igor" />
+  <br />
+  <MyHello name="Mia" />
+</>
       </textarea>
 
       <h4>With Hooks</h4>
@@ -170,7 +171,7 @@ React.createElement(() => {
 
       <textarea is="docoff-react-preview">
 <docoff-react-props
-    src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/lib/components/Alert/Alert.jsx"
+    src="https://raw.githubusercontent.com/react-ui-org/docoff/master/public/exampleJS/Greeting.jsx"
 ></docoff-react-props>
       </textarea>
 
