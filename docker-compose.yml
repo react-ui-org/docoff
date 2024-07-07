@@ -1,0 +1,21 @@
+services:
+  node:
+    build: docker/node
+    user: ${COMPOSE_UID-1000}:${COMPOSE_GID-1000}
+    volumes:
+      - .:/workspace:z
+
+  # Dev services
+  dev_server:
+    extends: node
+    entrypoint: npm start
+    ports:
+      - ${COMPOSE_START_PORT-8080}:8080
+  node_shell:
+    extends: node
+    entrypoint: bash
+
+  # Build services
+  build_site:
+    extends: node
+    entrypoint: npm run build

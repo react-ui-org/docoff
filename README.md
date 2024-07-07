@@ -151,8 +151,9 @@ To use this component:
     <docoff-react-props data-src="/exampleJS/common.props.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
     ```
 
-
 ## Development
+
+### Native
 
 **Run locally**: `npm start`
 
@@ -160,8 +161,9 @@ To use this component:
 
 **Test**: `npm test`
 
+### Using Docker
 
-
+**Run locally**: `docker compose up dev_server`
 
 
 
