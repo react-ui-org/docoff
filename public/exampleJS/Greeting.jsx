@@ -9,26 +9,38 @@ import {
 } from './common.props';
 
 const Greeting = ({
+  bold,
   greeting,
   id,
   name,
-}) => (
-  <strong id={id}>
-    {greeting}
-    ,
-    {' '}
-    {name}
-  </strong>
-);
+}) => {
+  const Tag = bold ? 'strong' : 'span';
+  return (
+    <Tag id={id}>
+      {greeting}
+      ,
+      {' '}
+      {name}
+    </Tag>
+  );
+};
 
 Greeting.defaultProps = {
+  bold: false,
   greeting: 'Hi',
   id: commonDefaultProps.id,
 };
 
 Greeting.propTypes = {
+  /**
+   * Whether to use bold text
+   */
+  bold: PropTypes.bool,
+
   greeting: commonPropTypes.greeting,
-  id: commonPropTypes.id,
+
+  id: commonPropTypes.commonId,
+
   /**
    * The name of the person to greet
    */

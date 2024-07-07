@@ -7,10 +7,12 @@ export const propTypes = {
    * The greeting to use
    */
   greeting: PropTypes.string,
+
   /**
    * Component ID
    */
   id: PropTypes.string,
+
   /**
    * Unused prop
    */
