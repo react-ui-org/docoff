@@ -23,7 +23,7 @@ export const getPropsTable = async (componentUrls) => {
 
     return docgen.parse(
       componentSrc,
-      docgen.resolver.findAllExportedComponentDefinitions,
+      new docgen.builtinResolvers.FindExportedDefinitionsResolver(),
       null,
       docgenParseOptions,
     );
