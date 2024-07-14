@@ -1,6 +1,5 @@
 import md from 'markdown-it';
 import * as docgen from 'react-docgen';
-import { docgenParseOptions } from '../docgenParseOptions';
 import { basePropTypesReducer } from './basePropTypesReducer';
 import { derivedPropTypesReducer } from './derivedPropTypesReducer';
 import { getFakeComponentSrc } from './getFakeComponentSrc';
@@ -23,9 +22,9 @@ export const getPropsTable = async (componentUrls) => {
 
     return docgen.parse(
       componentSrc,
-      new docgen.builtinResolvers.FindExportedDefinitionsResolver(),
-      null,
-      docgenParseOptions,
+      {
+        resolver: new docgen.builtinResolvers.FindExportedDefinitionsResolver(),
+      },
     );
   }));
 
