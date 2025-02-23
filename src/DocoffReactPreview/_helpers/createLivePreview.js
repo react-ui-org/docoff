@@ -45,10 +45,6 @@ export const createLivePreview = () => {
   const contentBody = document.createElement('body');
   contentHtml.appendChild(contentBody);
 
-  // We need to declare inner element as mounting React on `<body>` causes warnings in console
-  const contentRoot = document.createElement('div');
-  contentBody.appendChild(contentRoot);
-
   // Prevent keyDown events from bubbling when editing text (e.g. in an `<input>` field)
   livePreview.addEventListener('keydown', (e) => e.stopPropagation());
   livePreview.addEventListener('keyup', (e) => e.stopPropagation());

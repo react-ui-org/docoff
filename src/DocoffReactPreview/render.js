@@ -12,13 +12,13 @@ export const render = (container, previewRawCode, baseRawCode) => {
   );
 
   // We need to be able to get a reference to the element where react is to be mounted.
-  const viewElGetter = `
-    codeViewEl = document.currentScript
+  const codeViewParentElCode = `
+    codeViewParentEl = document.currentScript
       .nextSibling
       .shadowRoot
       .querySelector('[data-type=preview]')
       .shadowRoot
-      .querySelector('div');
+      .querySelector('body');
   `;
 
   let scriptText;
@@ -26,34 +26,61 @@ export const render = (container, previewRawCode, baseRawCode) => {
     const swcTransformOptions = getSwcTransformOptions();
     const baseTransCode = transformSync(baseRawCode, swcTransformOptions).code;
 
+    // We need to transform the preview code to be able to execute it.
+    // It needs to be transformed in isolation so that in case of errors the message is clear and does not contain code
+    // not written by the user.
+    const previewTransformedCode = transformSync(previewRawCode, swcTransformOptions).code;
+
     // We need to wrap the previewRawCode in a function as SWC can prepend inline some helpers functions
     // The `previewCodeGetter` function allows us to execute the desired code
     // Helpers are inserted based on the `target` option, set it to `es5` to see them
-    const previewTransCode = transformSync(`const previewCodeGetter = () => ${previewRawCode}`, swcTransformOptions).code;
+    const previewTransCode = `const previewCodeGetter = () => ${previewTransformedCode}`;
 
     scriptText = `
       (() => {
         ${baseTransCode}
-        ${viewElGetter}
-        try {
-          ${previewTransCode};
-          ReactDOM.render(previewCodeGetter(), codeViewEl);
-        } catch (e) {
-          ReactDOM.unmountComponentAtNode(codeViewEl);
-          codeViewEl.innerText = e.message;
-        }
+        ${codeViewParentElCode}
+        // Remove existing element for cases that this a rerender.
+        // There is no way to pass React root between rerenders since we do not want to keep global state. So the only
+        // way is to always create the element and React root anew.
+        codeViewParentEl.querySelector('#react-root')?.remove();
+
+        // Remove errors from previous renders
+        codeViewParentEl.querySelector('#error-root')?.remove();
+
+        // We need to declare inner element as mounting React on <body> is not allowed
+        const reactRootEl = document.createElement('div');
+        reactRootEl.id = 'react-root';
+
+        codeViewParentEl.appendChild(reactRootEl);
+        reactRoot = ReactDOM.createRoot(reactRootEl);
+
+        ${previewTransCode};
+        reactRoot.render(previewCodeGetter());
       })();
     `;
   } catch (e) {
-    const errorText = e.message
-      ? e.message.replaceAll('`', '\\`')
-      : 'Unknown error';
+    const errorText = e
+
+      // We need to escape backticks (`) as they are used to wrap the string
+      .replaceAll('`', '\\`')
+
+      // We need to remove ANSI escape codes (console formatting such as colors) from the error message
+      .replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 
     // The `e.message` can be multiline, so we need to use backticks (`) around `errorText`.
     scriptText = `
-      ${viewElGetter}
-      ReactDOM.unmountComponentAtNode(codeViewEl);
-      codeViewEl.innerText = \`Compilation error: ${errorText}\`;
+      ${codeViewParentElCode}
+      // way is to always create the element and React root anew.
+      codeViewParentEl.querySelector('#react-root')?.remove();
+
+      // Remove errors from previous renders
+      codeViewParentEl.querySelector('#error-root')?.remove();
+
+      const errorMessageEl = document.createElement('div');
+      errorMessageEl.innerText = \`${errorText}\`;
+      errorMessageEl.id = 'error-root';
+      codeViewParentEl.appendChild(errorMessageEl);
     `;
   }
 
