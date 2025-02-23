@@ -110,6 +110,8 @@ To render props of a single React.Component:
 
 This element also provides some shortcuts to cascade prop type definitions. It allows using *prop definition files* separate from component definition. It is useful to avoid huge files or to have one prop definition used on several places.
 
+The props are presented alphabetically sorted regardless of the source of the definition.
+
 Beware, that some React related eslint rules do not always work with the more complicated inheritance constructs.
 
 #####  Files

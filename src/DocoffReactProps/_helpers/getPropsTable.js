@@ -57,16 +57,18 @@ export const getPropsTable = async (componentUrls) => {
   );
 
   const table = getTableElement();
-  Object.keys(propTypes).forEach((propName) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <th>${propName}${propTypes[propName].required ? '*' : ''}</th>
-        <td>${getPropTypeHtml(propTypes[propName].type)}</td>
-        <td>${propTypes[propName].defaultValue ? `<pre><code>${propTypes[propName].defaultValue.value}</code></pre>` : ''}</td>
-        <td>${md().render(propTypes[propName].description)}</td>
-      `;
-    table.append(row);
-  });
+  Object.keys(propTypes)
+    .sort()
+    .forEach((propName) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <th>${propName}${propTypes[propName].required ? '*' : ''}</th>
+          <td>${getPropTypeHtml(propTypes[propName].type)}</td>
+          <td>${propTypes[propName].defaultValue ? `<pre><code>${propTypes[propName].defaultValue.value}</code></pre>` : ''}</td>
+          <td>${md().render(propTypes[propName].description)}</td>
+        `;
+      table.append(row);
+    });
 
   return table;
 };
