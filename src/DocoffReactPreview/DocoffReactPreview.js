@@ -81,7 +81,9 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     // Initialize SWC
     // A single SWC instance is shared between all instances of `docoff-react-preview`
     if (window.swcInitPromise == null) {
-      window.swcInitPromise = initSwc(window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-wasm-path'));
+      window.swcInitPromise = initSwc({
+        moduleOrPath: window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-wasm-path'),
+      });
     }
 
     // Once SWC was initialized we can start rendering
