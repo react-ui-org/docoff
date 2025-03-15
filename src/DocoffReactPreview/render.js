@@ -66,6 +66,7 @@ export const render = (container, previewRawCode, baseRawCode) => {
       .replaceAll('`', '\\`')
 
       // We need to remove ANSI escape codes (console formatting such as colors) from the error message
+      // eslint-disable-next-line no-control-regex
       .replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 
     // The `e.message` can be multiline, so we need to use backticks (`) around `errorText`.
