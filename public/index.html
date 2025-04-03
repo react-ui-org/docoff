@@ -76,6 +76,10 @@
 const MyHello = ({name}) => (
   <strong>Hello, {name}</strong>
 );
+
+const MyHelloTS: React.FC<{ name: string }> = ({name}) => (
+  <strong>Hello, {name} from TS stack.</strong>
+);
       </textarea>
 
       <h2><code>docoff-react-preview</code></h2>
@@ -103,6 +107,17 @@ const MyHello = ({name}) => (
       <h4>Single Component</h4>
       <textarea is="docoff-react-preview">
 <MyHello name="Igor" />
+      </textarea>
+
+      <h4>Typescript</h4>
+      <textarea is="docoff-react-preview">
+React.createElement(() => {
+  const name: string = 'Olina';
+
+  return (
+    <MyHelloTS name="Olina" />
+  );
+});
       </textarea>
 
       <h4>Multiple Components</h4>
@@ -144,7 +159,7 @@ React.createElement(() => {
       <h2><code>docoff-react-props</code></h2>
 
       <p><code>&ltdocoff-react-props&gt;</code> renders the component prop definition table.</p>
-      <p>The props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
+      <p>For JavaScript, the props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
       <p>There are simple rules for loading props from multiple files:</p>
       <ul>
         <li>Files get processed sequentially
@@ -158,7 +173,16 @@ React.createElement(() => {
       <h3>Examples</h3>
       <p>Using <code>docoff-react-preview</code> :)</p>
 
+      <h4>Typescript</h4>
+      <code><pre>node_modules/.bin/react-docgen public/exampleTS/Greeting.tsx > Greeting.props.json</pre></code>
+
+      <textarea is="docoff-react-preview">
+<docoff-react-props src="/exampleTS/Greeting.props.json"></docoff-react-props>
+      </textarea>
+
       <h4>Relative URL with Overloading</h4>
+
+      <p>⚠️ Does not work with TypeScript</p>
 
       <textarea is="docoff-react-preview">
 <docoff-react-props src="

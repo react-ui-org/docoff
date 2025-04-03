@@ -45,6 +45,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.10",
     "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.26.0",
     "@babel/register": "^7.16.9",
     "@visionappscz/eslint-config-visionapps": "^1.5.0",
     "babel-loader": "^9.2.1",

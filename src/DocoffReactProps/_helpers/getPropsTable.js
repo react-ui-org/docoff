@@ -5,6 +5,7 @@ import { derivedPropTypesReducer } from './derivedPropTypesReducer';
 import { getFakeComponentSrc } from './getFakeComponentSrc';
 import { getPropTypeHtml } from './getPropTypeHtml';
 import { getTableElement } from './getTableElement';
+import { getTSTypeHtml } from './getTSTypeHtml';
 
 const PROP_DEF_COMPONENT = 'DocoffReactPropDefComponent';
 
@@ -15,6 +16,12 @@ export const getPropsTable = async (componentUrls) => {
     if (componentRes.status !== 200) {
       return undefined;
     }
+
+    if (componentUrl.endsWith('.props.json')) {
+      const json = await componentRes.json();
+      return json['public/exampleTS/Greeting.tsx'];
+    }
+
     const componentRawSrc = await componentRes.text();
     const componentSrc = componentUrl.endsWith('.props.js')
       ? getFakeComponentSrc(componentRawSrc, PROP_DEF_COMPONENT)
@@ -23,7 +30,12 @@ export const getPropsTable = async (componentUrls) => {
     return docgen.parse(
       componentSrc,
       {
-        resolver: new docgen.builtinResolvers.FindExportedDefinitionsResolver(),
+        babelOptions: {
+          parserOpts: {
+            plugins: ['typescript', 'jsx'],
+          },
+        },
+        resolver: new docgen.builtinResolvers.FindAllDefinitionsResolver(),
       },
     );
   }));
@@ -63,7 +75,9 @@ export const getPropsTable = async (componentUrls) => {
       const row = document.createElement('tr');
       row.innerHTML = `
           <th>${propName}${propTypes[propName].required ? '*' : ''}</th>
-          <td>${getPropTypeHtml(propTypes[propName].type)}</td>
+          <td>
+            ${propTypes[propName]?.type ? getPropTypeHtml(propTypes[propName]?.type) : getTSTypeHtml(propTypes[propName]?.tsType)}
+          </td>
           <td>${propTypes[propName].defaultValue ? `<pre><code>${propTypes[propName].defaultValue.value}</code></pre>` : ''}</td>
           <td>${md().render(propTypes[propName].description)}</td>
         `;
