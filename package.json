@@ -38,7 +38,7 @@
     "path-browserify": "^1.0.1",
     "prismjs": "^1.27.0",
     "process": "^0.11.10",
-    "react-docgen": "^7.0.3"
+    "react-docgen": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
