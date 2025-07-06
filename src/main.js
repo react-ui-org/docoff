@@ -2,10 +2,12 @@ import { DocoffPlaceholder } from './DocoffPlaceholder';
 import { DocoffReactPreview } from './DocoffReactPreview';
 import { DocoffReactBase } from './DocoffReactBase';
 import { DocoffReactProps } from './DocoffReactProps';
+import { DocoffFunctionDoc } from './DocoffFunctionDoc';
 
 customElements.define('docoff-react-preview', DocoffReactPreview, { extends: 'textarea' });
 customElements.define('docoff-react-base', DocoffReactBase, { extends: 'textarea' });
 customElements.define('docoff-react-props', DocoffReactProps);
+customElements.define('docoff-function-doc', DocoffFunctionDoc);
 customElements.define('docoff-placeholder', DocoffPlaceholder);
 
 // For comfortable usage in Markdown any `<code>` elements with class `language-docoff-*`
