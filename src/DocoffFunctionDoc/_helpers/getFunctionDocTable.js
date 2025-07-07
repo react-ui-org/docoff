@@ -37,82 +37,72 @@ export const getFunctionDocTable = async (functionUrl) => {
       return noFunctionsEl;
     }
 
-    // Create a container for all function documentation
-    const container = document.createElement('div');
+    // Since we now only support one function, get the first (and only) function
+    const func = functions[0];
 
-    functions.forEach((func) => {
-      // Create section for each function
-      const functionSection = document.createElement('div');
+    // Create section for the function
+    const functionSection = document.createElement('div');
 
-      // Function name as heading (only if no specific function was requested or multiple functions)
-      if (!targetFunctionName || functions.length > 1) {
-        const heading = document.createElement('h4');
-        heading.textContent = func.name;
-        functionSection.appendChild(heading);
-      }
+    // Function description
+    if (func.description) {
+      const description = document.createElement('p');
+      description.textContent = func.description;
+      functionSection.appendChild(description);
+    }
 
-      // Function description
-      if (func.description) {
-        const description = document.createElement('p');
-        description.textContent = func.description;
-        functionSection.appendChild(description);
-      }
+    // Create description list for parameters and return value
+    const dl = document.createElement('dl');
 
-      // Create description list for parameters and return value
-      const dl = document.createElement('dl');
+    // Add parameters and return value in one table
+    if (func.params && func.params.length > 0) {
+      func.params.forEach((param) => {
+        const paramName = document.createElement('dt');
+        paramName.innerHTML = `<code>${param.name}</code>`;
 
-      // Add parameters and return value in one table
-      if (func.params && func.params.length > 0) {
-        func.params.forEach((param) => {
-          const paramName = document.createElement('dt');
-          paramName.innerHTML = `<code>${param.name}</code>`;
+        const paramDetails = document.createElement('dd');
 
-          const paramDetails = document.createElement('dd');
-
-          let paramText = '';
-          if (param.type) {
-            paramText += `<code>${param.type}</code>`;
-          }
-          if (param.optional) {
-            paramText += ' (optional)';
-          }
-          if (param.description) {
-            paramText += ` - ${param.description}`;
-          }
-
-          paramDetails.innerHTML = paramText;
-
-          dl.appendChild(paramName);
-          dl.appendChild(paramDetails);
-        });
-      }
-
-      // Add return value
-      if (func.returns) {
-        const returnsName = document.createElement('dt');
-        returnsName.innerHTML = '<code>returns</code>';
-
-        const returnsDetails = document.createElement('dd');
-
-        let returnText = '';
-        if (func.returns.type) {
-          returnText += `<code>${func.returns.type}</code>`;
+        let paramText = '';
+        if (param.type) {
+          paramText += `<code>${param.type}</code>`;
         }
-        if (func.returns.description) {
-          returnText += ` - ${func.returns.description}`;
+        if (param.optional) {
+          paramText += ' (optional)';
+        }
+        if (param.description) {
+          paramText += ` - ${param.description}`;
         }
 
-        returnsDetails.innerHTML = returnText;
+        paramDetails.innerHTML = paramText;
 
-        dl.appendChild(returnsName);
-        dl.appendChild(returnsDetails);
+        dl.appendChild(paramName);
+        dl.appendChild(paramDetails);
+      });
+    }
+
+    // Add return value
+    if (func.returns) {
+      const returnsName = document.createElement('dt');
+      returnsName.innerHTML = '<code>returns</code>';
+
+      const returnsDetails = document.createElement('dd');
+
+      let returnText = '';
+      if (func.returns.type) {
+        returnText += `<code>${func.returns.type}</code>`;
+      }
+      if (func.returns.description) {
+        returnText += ` - ${func.returns.description}`;
       }
 
-      functionSection.appendChild(dl);
-      container.appendChild(functionSection);
-    });
+      returnsDetails.innerHTML = returnText;
 
-    return container;
+      dl.appendChild(returnsName);
+      dl.appendChild(returnsDetails);
+    }
+
+    functionSection.appendChild(dl);
+
+    return functionSection;
   } catch (error) {
     // Suppress console in production, but allow for debugging
     if (process.env.NODE_ENV !== 'test') {
