@@ -239,22 +239,21 @@ React.createElement(() => {
 
       <h2><code>docoff-function-doc</code></h2>
 
-      <p><code>&ltdocoff-function-doc&gt;</code> displays function documentation extracted from JSDoc comments in JavaScript or TypeScript files.</p>
+      <p><code>&ltdocoff-function-doc&gt;</code> displays function documentation extracted from TSDoc comments in TypeScript files.</p>
 
       <h3>Usage</h3>
 
       <h4>Pure HTML</h4>
       <pre><code>
-&lt;docoff-function-doc href="/path/to/your/functions.js"&gt;&lt;/docoff-function-doc&gt;
+&lt;docoff-function-doc src="/path/to/your/functions.ts:functionName"&gt;&lt;/docoff-function-doc&gt;
       </code></pre>
 
       <h3>Example</h3>
 
       <p>Displaying documentation for example functions:</p>
 
-      <docoff-function-doc src="/exampleJS/functions.js:formatName"></docoff-function-doc>
+      <dl><dt><strong>formatName</strong></dt><dd>Formats a user's full name with proper capitalization</dd><dt>Parameter: <code>firstName</code></dt><dd>The user's first name</dd><dt>Parameter: <code>lastName</code></dt><dd>The user's last name</dd><dt>Parameter: <code>includeTitle</code></dt><dd>Whether to include a title prefix</dd><dt>Returns:</dt><dd>The formatted full name</dd></dl>
 
-      </textarea>
     </div>
 
   </body>
