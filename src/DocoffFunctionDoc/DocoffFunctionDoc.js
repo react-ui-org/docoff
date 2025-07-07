@@ -2,26 +2,19 @@ import { getFunctionDocTable } from './_helpers/getFunctionDocTable';
 
 class DocoffFunctionDoc extends HTMLElement {
   static get observedAttributes() {
-    return ['href'];
+    return ['src'];
   }
 
   async connectedCallback() {
-    const functionUrl = this.getHrefAttributeValue();
-    if (functionUrl) {
-      try {
-        const data = await getFunctionDocTable(functionUrl);
-        this.replaceChildren(data);
-      } catch (error) {
-        const errorEl = document.createElement('div');
-        errorEl.style.color = 'red';
-        errorEl.textContent = `Error loading function documentation: ${error.message}`;
-        this.replaceChildren(errorEl);
-      }
-    }
+    await this.render();
   }
 
   async attributeChangedCallback() {
-    const functionUrl = this.getHrefAttributeValue();
+    await this.render();
+  }
+
+  async render() {
+    const functionUrl = this.getSrcAttributeValue();
     if (functionUrl) {
       try {
         const data = await getFunctionDocTable(functionUrl);
@@ -35,8 +28,8 @@ class DocoffFunctionDoc extends HTMLElement {
     }
   }
 
-  getHrefAttributeValue() {
-    return this.attributes.href?.value?.trim();
+  getSrcAttributeValue() {
+    return this.attributes.src?.value?.trim();
   }
 }
 
