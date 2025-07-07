@@ -70,7 +70,7 @@
     "webpack-dev-server": "^5.2.0"
   },
   "scripts": {
-    "build": "webpack --mode=production && node scripts/processDocoffFunctionDoc.js",
+    "build": "webpack --mode=production",
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
     "test": "npm run test:eslint && npm run test:jest",

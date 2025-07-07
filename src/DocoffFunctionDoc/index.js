@@ -1,0 +1,1 @@
+export { DocoffFunctionDoc } from './DocoffFunctionDoc';

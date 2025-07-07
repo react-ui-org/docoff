@@ -98,6 +98,9 @@ async function generateFunctionDoc(filePath, functionName, baseDir) {
     throw new Error(`No TSDoc comment found for function '${functionName}'`);
   }
 
+  // Extract type information from the function
+  const typeInfo = extractTypeInformation(functionNode);
+
   // Parse TSDoc comment
   const parser = new TSDocParser();
   const parserContext = parser.parseString(tsdocComment);
@@ -107,7 +110,7 @@ async function generateFunctionDoc(filePath, functionName, baseDir) {
   }
 
   // Generate HTML from parsed TSDoc
-  return generateHTMLFromTSDoc(functionName, parserContext.docComment);
+  return generateHTMLFromTSDoc(functionName, parserContext.docComment, typeInfo);
 }
 
 function findFunctionNode(sourceFile, functionName) {
@@ -155,7 +158,41 @@ function extractTSDocComment(sourceFile, functionNode) {
   return null;
 }
 
-function generateHTMLFromTSDoc(functionName, docComment) {
+function extractTypeInformation(functionNode) {
+  const typeInfo = {
+    parameters: [],
+    returnType: null
+  };
+
+  // Extract parameter types
+  if (functionNode.parameters) {
+    for (const param of functionNode.parameters) {
+      const paramName = param.name.text;
+      let paramType = 'any';
+      
+      if (param.type) {
+        paramType = param.type.getText();
+      }
+      
+      const isOptional = param.questionToken !== undefined || param.initializer !== undefined;
+      
+      typeInfo.parameters.push({
+        name: paramName,
+        type: paramType,
+        optional: isOptional
+      });
+    }
+  }
+
+  // Extract return type
+  if (functionNode.type) {
+    typeInfo.returnType = functionNode.type.getText();
+  }
+
+  return typeInfo;
+}
+
+function generateHTMLFromTSDoc(functionName, docComment, typeInfo) {
   const summary = docComment.summarySection;
   const params = docComment.params;
   const returnsBlock = docComment.returnsBlock;
@@ -175,7 +212,13 @@ function generateHTMLFromTSDoc(functionName, docComment) {
     for (const param of params.blocks) {
       const paramName = param.parameterName;
       const paramDescription = param.content ? extractTextFromNodes(param.content.nodes) : '';
-      html += `<dt>Parameter: <code>${paramName}</code></dt>`;
+      
+      // Find type information for this parameter
+      const typeInfoParam = typeInfo.parameters.find(p => p.name === paramName);
+      const typeDisplay = typeInfoParam ? `<span style="color: #0066cc;">${typeInfoParam.type}</span>` : '';
+      const optionalDisplay = typeInfoParam && typeInfoParam.optional ? ' (optional)' : '';
+      
+      html += `<dt>Parameter: <code>${paramName}</code>${typeDisplay ? `: ${typeDisplay}` : ''}${optionalDisplay}</dt>`;
       html += `<dd>${paramDescription}</dd>`;
     }
   }
@@ -183,7 +226,8 @@ function generateHTMLFromTSDoc(functionName, docComment) {
   // Returns
   if (returnsBlock && returnsBlock.content) {
     const returnDescription = extractTextFromNodes(returnsBlock.content.nodes);
-    html += `<dt>Returns:</dt>`;
+    const returnTypeDisplay = typeInfo.returnType ? `<span style="color: #009900;">${typeInfo.returnType}</span>` : '';
+    html += `<dt>Returns${returnTypeDisplay ? `: ${returnTypeDisplay}` : ''}</dt>`;
     html += `<dd>${returnDescription}</dd>`;
   }
 
