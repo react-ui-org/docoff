@@ -2,13 +2,29 @@ import { getFunctionDocTable } from './getFunctionDocTable';
 
 // Mock DOM globals with simplified implementation for testing
 const mockDocument = {
-  createElement: jest.fn().mockImplementation((tagName) => ({
-    appendChild: jest.fn(),
-    innerHTML: '',
-    style: {},
-    tagName: tagName.toUpperCase(),
-    textContent: '',
-  })),
+  createElement: jest.fn().mockImplementation((tagName) => {
+    const element = {
+      appendChild: jest.fn(),
+      innerHTML: '',
+      style: {},
+      tagName: tagName.toUpperCase(),
+      _textContent: '',
+    };
+    
+    // Define textContent as a property with getter and setter
+    Object.defineProperty(element, 'textContent', {
+      get() {
+        return this._textContent;
+      },
+      set(value) {
+        this._textContent = value;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+    
+    return element;
+  }),
 };
 
 // Mock fetch for testing

@@ -86,4 +86,52 @@ function noDoc() {
 
     expect(result).toHaveLength(0);
   });
+
+  it('should find specific function when targetFunctionName is provided', () => {
+    const code = `
+/**
+ * Adds two numbers
+ * @param {number} a - First number
+ * @param {number} b - Second number
+ * @returns {number} The sum
+ */
+function add(a, b) {
+  return a + b;
+}
+
+/**
+ * Multiplies two numbers
+ * @param {number} x - First number
+ * @param {number} y - Second number
+ * @returns {number} The product
+ */
+function multiply(x, y) {
+  return x * y;
+}
+    `;
+
+    const result = parseFunctionDoc(code, 'multiply');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('multiply');
+    expect(result[0].description).toBe('Multiplies two numbers');
+  });
+
+  it('should return empty array when target function not found', () => {
+    const code = `
+/**
+ * Adds two numbers
+ * @param {number} a - First number
+ * @param {number} b - Second number
+ * @returns {number} The sum
+ */
+function add(a, b) {
+  return a + b;
+}
+    `;
+
+    const result = parseFunctionDoc(code, 'nonexistent');
+
+    expect(result).toHaveLength(0);
+  });
 });

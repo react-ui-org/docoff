@@ -132,9 +132,10 @@ const extractFunctionDoc = (node, fileContent, customName) => {
 /**
  * Parses a JavaScript/TypeScript file to extract function documentation
  * @param {string} fileContent - The content of the JS/TS file
+ * @param {string} [targetFunctionName] - Optional specific function name to search for
  * @returns {Array} Array of function documentation objects
  */
-export const parseFunctionDoc = (fileContent) => {
+export const parseFunctionDoc = (fileContent, targetFunctionName) => {
   try {
     // Parse the file content into an AST
     const ast = parse(fileContent, {
@@ -158,10 +159,11 @@ export const parseFunctionDoc = (fileContent) => {
     });
 
     const functions = [];
+    let foundTargetFunction = false;
 
     // Walk through the AST to find function declarations and expressions
     const walkNode = (node) => {
-      if (!node || typeof node !== 'object') {
+      if (!node || typeof node !== 'object' || foundTargetFunction) {
         return;
       }
 
@@ -169,13 +171,25 @@ export const parseFunctionDoc = (fileContent) => {
       if (node.type === 'FunctionDeclaration' && node.id?.name) {
         const functionDoc = extractFunctionDoc(node, fileContent);
         if (functionDoc) {
-          functions.push(functionDoc);
+          // If we have a target function name, only add it if it matches
+          if (targetFunctionName) {
+            if (functionDoc.name === targetFunctionName) {
+              functions.push(functionDoc);
+              foundTargetFunction = true;
+              return; // Exit early since we found our target
+            }
+          } else {
+            // No target specified, add all functions
+            functions.push(functionDoc);
+          }
         }
       }
 
       // Handle variable declarations with function expressions
       if (node.type === 'VariableDeclaration') {
-        node.declarations?.forEach((declaration) => {
+        for (const declaration of node.declarations || []) {
+          if (foundTargetFunction) break;
+          
           if (
             declaration.id?.name
             && (declaration.init?.type === 'FunctionExpression'
@@ -183,20 +197,37 @@ export const parseFunctionDoc = (fileContent) => {
           ) {
             const functionDoc = extractFunctionDoc(declaration, fileContent, declaration.id.name);
             if (functionDoc) {
-              functions.push(functionDoc);
+              // If we have a target function name, only add it if it matches
+              if (targetFunctionName) {
+                if (functionDoc.name === targetFunctionName) {
+                  functions.push(functionDoc);
+                  foundTargetFunction = true;
+                  return; // Exit early since we found our target
+                }
+              } else {
+                // No target specified, add all functions
+                functions.push(functionDoc);
+              }
             }
           }
-        });
+        }
       }
 
-      // Recursively walk child nodes
-      Object.values(node).forEach((child) => {
-        if (Array.isArray(child)) {
-          child.forEach(walkNode);
-        } else if (child && typeof child === 'object') {
-          walkNode(child);
+      // Recursively walk child nodes only if we haven't found the target function yet
+      if (!foundTargetFunction) {
+        for (const child of Object.values(node)) {
+          if (foundTargetFunction) break;
+          
+          if (Array.isArray(child)) {
+            for (const item of child) {
+              if (foundTargetFunction) break;
+              walkNode(item);
+            }
+          } else if (child && typeof child === 'object') {
+            walkNode(child);
+          }
         }
-      });
+      }
     };
 
     walkNode(ast);

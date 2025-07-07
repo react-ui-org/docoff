@@ -19,21 +19,15 @@ export const getFunctionDocTable = async (functionUrl) => {
     const fileContent = await response.text();
 
     // Parse the functions and their documentation
-    let functions = parseFunctionDoc(fileContent);
-
-    // Filter to specific function if specified
-    if (targetFunctionName) {
-      functions = functions.filter((func) => func.name === targetFunctionName);
-      if (functions.length === 0) {
-        const noFunctionsEl = document.createElement('div');
-        noFunctionsEl.textContent = `Function "${targetFunctionName}" not found in this file.`;
-        return noFunctionsEl;
-      }
-    }
+    const functions = parseFunctionDoc(fileContent, targetFunctionName);
 
     if (functions.length === 0) {
       const noFunctionsEl = document.createElement('div');
-      noFunctionsEl.textContent = 'No documented functions found in this file.';
+      if (targetFunctionName) {
+        noFunctionsEl.textContent = `Function "${targetFunctionName}" not found in this file.`;
+      } else {
+        noFunctionsEl.textContent = 'No documented functions found in this file.';
+      }
       return noFunctionsEl;
     }
 
