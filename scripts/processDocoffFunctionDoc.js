@@ -51,8 +51,10 @@ async function processDocoffFunctionDoc(options = {}) {
     }
 
     if (hasChanges) {
-      // Calculate output path
-      const outputPath = path.resolve(outputDir, path.relative(sourceDir, htmlFile));
+      // Calculate output path - remove .template from filename
+      let relativePath = path.relative(sourceDir, htmlFile);
+      relativePath = relativePath.replace('.template.html', '.html');
+      const outputPath = path.resolve(outputDir, relativePath);
       
       // Ensure output directory exists
       fs.mkdirSync(path.dirname(outputPath), { recursive: true });

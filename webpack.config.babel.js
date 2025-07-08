@@ -52,7 +52,9 @@ module.exports = (env, argv) => ({
     publicPath: '/generated/',
   },
   plugins: [
-    new DocoffFunctionDocPlugin(),
+    new DocoffFunctionDocPlugin({
+      htmlPattern: '**/*.template.html'
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(argv.mode),
       'process.env.BABEL_ENV': JSON.stringify(argv.mode),

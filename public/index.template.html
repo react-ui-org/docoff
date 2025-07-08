@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Docoff</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link type="text/css" rel="stylesheet" href="/main.css" />
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
+    <script src="/generated/bundle.js"></script>
+    <style>
+      h2 {
+        padding-top: 2em;
+      }
+      h3, h4 {
+        padding-top: 1em;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+      thead th {
+        width: 25%;
+      }
+    </style>
+  </head>
+
+  <body class="py-5">
+    <div class="container">
+
+      <h1>Docoff Demo</h1>
+
+      <p>Styles used in this demo:</p>
+      <ul>
+        <li><code>/shadow.css</code> Sets all text inside preview to be red and monospaced.</li>
+        <li><code>/main.css</code> Sets CSS custom properties including location of the <code>/shadow.css</code></li>
+      </ul>
+
+      <p>Feel free to inspect them in dev tools!</p>
+
+      <h2><code>docoff-react-base</code></h2>
+
+      <p><code>&ltdocoff-react-base&gt;</code> allows to define code that is common for all <code>docoff-react-preview</code> elements on the
+        given page. This is handy for defining code fragments susch as constants or placeholder React components that
+        can be used further on.</p>
+
+      <h3>Usage</h3>
+
+      <h4>Pure HTML</h4>
+      <pre><code>
+&lt;textarea is=&quot;docoff-react-base&quot;&gt;
+// Your JS code here
+&lt;/textarea&gt;
+      </code></pre>
+
+      <h4>Markdown</h4>
+      <pre><code>
+```docoff-react-base
+// Your JS code here
+```
+      </code></pre>
+
+      <h3>Example</h3>
+
+      <textarea is="docoff-react-base">
+const MyHello = ({name}) => (
+  <strong>Hello, {name}</strong>
+);
+
+const MyHelloTS: React.FC<{ name: string }> = ({name}) => (
+  <strong>Hello, {name} from TS stack.</strong>
+);
+      </textarea>
+
+      <h2><code>docoff-react-preview</code></h2>
+
+      <p><code>&ltdocoff-react-preview&gt;</code> renders a live preview of JSX code.</p>
+
+      <h3>Usage</h3>
+
+      <h4>Pure HTML</h4>
+      <pre><code>
+&lt;textarea is=&quot;docoff-react-preview&quot; css=&quot;/shadow.css&quot;&gt;
+  &lt;YourCustomJSX /&gt;
+&lt;/textarea&gt;
+      </code></pre>
+
+      <h4>Markdown</h4>
+      <pre><code>
+```docoff-react-base
+// Your JS code here
+```
+      </code></pre>
+
+      <h3>Example</h3>
+
+      <h4>Single Component</h4>
+      <textarea is="docoff-react-preview">
+<MyHello name="Igor" />
+      </textarea>
+
+      <h4>Typescript</h4>
+      <textarea is="docoff-react-preview">
+React.createElement(() => {
+  const name: string = 'Olina';
+
+  return (
+    <MyHelloTS name="Olina" />
+  );
+});
+      </textarea>
+
+      <h4>Multiple Components</h4>
+      <textarea is="docoff-react-preview">
+<>
+  <MyHello name="Igor" />
+  <br />
+  <MyHello name="Mia" />
+</>
+      </textarea>
+
+      <h4>With Hooks</h4>
+
+      <textarea is="docoff-react-preview">
+React.createElement(() => {
+  const [name, setName] = React.useState('Igor');
+  const MyButton = ({
+    label,
+    onClick,
+  }) => (
+    <button onClick={onClick}>{label}</button>
+  );
+
+  return (
+    <>
+      <MyHello name={name} />
+      <br />
+      <MyButton
+        label={'Swap name'}
+        onClick={() => setName(name === 'Igor' ? 'Mia' : 'Igor')}
+      />
+    </>
+  );
+});
+      </textarea>
+
+
+
+      <h2><code>docoff-react-props</code></h2>
+
+      <p><code>&ltdocoff-react-props&gt;</code> renders the component prop definition table.</p>
+      <p>For JavaScript, the props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
+      <p>There are simple rules for loading props from multiple files:</p>
+      <ul>
+        <li>Files get processed sequentially
+        <li>The result of merging all previous files is used as base when merging in the current file</li>
+        <li>When a prop is not defined in the current file, it will not be present in the merge result</li>
+        <li>When a prop is defined in the current file, with docblock description of the prop type definition, the definition from current file will be used</li>
+        <li>When a prop default value is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used, but with the default value from the current file</li>
+        <li>When a prop is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used including default value</li>
+      </ul>
+
+      <h3>Examples</h3>
+      <p>Using <code>docoff-react-preview</code> :)</p>
+
+      <h4>Typescript</h4>
+      <code><pre>node_modules/.bin/react-docgen public/exampleTS/Greeting.tsx > Greeting.props.json</pre></code>
+
+      <textarea is="docoff-react-preview">
+<docoff-react-props src="/exampleTS/Greeting.props.json"></docoff-react-props>
+      </textarea>
+
+      <h4>Relative URL with Overloading</h4>
+
+      <p>⚠️ Does not work with TypeScript</p>
+
+      <textarea is="docoff-react-preview">
+<docoff-react-props src="
+    /exampleJS/common.props.js
+    |/exampleJS/Greeting.jsx
+"></docoff-react-props>
+      </textarea>
+
+      <h4>Absolute URL</h4>
+
+      <textarea is="docoff-react-preview">
+<docoff-react-props
+    src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/components/Alert/Alert.jsx"
+></docoff-react-props>
+      </textarea>
+
+
+
+      <h2><code>docoff-placeholder</code></h2>
+
+      <code>&ltdocoff-placeholder&gt;</code> renders a placeholder that can be used in code examples.
+
+      <textarea is="docoff-react-preview">
+<docoff-placeholder bordered></docoff-placeholder>
+      </textarea>
+
+      <h3>Children</h3>
+      <p>Children can be inserted</p>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder bordered>Hello</docoff-placeholder>
+      </textarea>
+
+      <h3>Color</h3>
+      <p>It can be rendered dark</p>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder dark></docoff-placeholder>
+      </textarea>
+
+      <h3>Size</h3>
+      <p>Size can be set using any valid css units</p>
+      <textarea is="docoff-react-preview">
+<docoff-placeholder width="50px" height="50px" bordered></docoff-placeholder>
+      </textarea>
+
+      <h3>Layout</h3>
+      <p>It can be rendered inline</p>
+      <textarea is="docoff-react-preview">
+<>
+  Inline
+  {' '}
+  <docoff-placeholder inline bordered></docoff-placeholder>
+</>
+  </textarea>
+
+      <h2><code>docoff-function-doc</code></h2>
+
+      <p><code>&ltdocoff-function-doc&gt;</code> displays function documentation extracted from <a href="https://tsdoc.org/" target="_blank">TSDoc</a> comments in TypeScript files.</p>
+
+      <h3>Usage</h3>
+
+      <h4>Pure HTML</h4>
+      <pre><code>
+&lt;docoff-function-doc src="/path/to/your/functions.ts:functionName"&gt;&lt;/docoff-function-doc&gt;
+      </code></pre>
+
+      <h3>Example</h3>
+
+      <p>Displaying documentation for example functions:</p>
+
+      <docoff-function-doc src="/exampleTS/functions.ts:formatName"></docoff-function-doc>
+
+    </div>
+
+  </body>
+</html>
