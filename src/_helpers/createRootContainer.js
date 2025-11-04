@@ -25,6 +25,7 @@ export const createRootContainer = () => {
       font-size: var(--docoff-code-font-size);
       line-height: var(--docoff-code-line-height);
       color: lightblue;
+      isolation: isolate;
     }
 
     .docoff-Code__editor {
