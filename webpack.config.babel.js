@@ -1,6 +1,7 @@
 const Path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
+const DocoffFunctionDocPlugin = require('./src/_plugins/DocoffFunctionDocPlugin');
 
 const MAX_OUTPUT_SIZE_KB = 1600000;
 
@@ -51,6 +52,9 @@ module.exports = (env, argv) => ({
     publicPath: '/generated/',
   },
   plugins: [
+    new DocoffFunctionDocPlugin({
+      htmlPattern: '**/*.template.html'
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(argv.mode),
       'process.env.BABEL_ENV': JSON.stringify(argv.mode),
