@@ -12,7 +12,7 @@ component library documentation.
 
 ## `docoff-react-base` / `docoff-react-preview`
 
-These components allow to create a live editable JSX component demo in browser.
+These components allow to create a live editable TSX/JSX component demo in browser.
 
 **Design decisions:**
 
@@ -22,10 +22,20 @@ These components allow to create a live editable JSX component demo in browser.
 2. All rendering code is run from within a `<script>` tag inserted into the
     document. This is needed so that the `React` version is not hard-coded in
     this library and can be loaded by the user in the desired version.
-3. `@babel/standalone` is loaded via CDN because that seems to be the only
-    supported way.
+3. The preview code is transpiled in browser by [Sucrase](https://github.com/alangpierce/sucrase)
+    See [Limitations](#limitations).
 4. Components preview are completely isolated inside a shadowDom from the page CSS styles.
 
+### Limitations
+
+The preview code is transpiled by [Sucrase](https://github.com/alangpierce/sucrase)
+which only strips TypeScript types and transforms JSX. This means:
+
+1. The syntax is not transpiled to older ECMAScript versions, so the browser
+    must natively support all the syntax used in the preview code.
+2. TypeScript types are not checked, they are only stripped.
+3. `namespace` declarations are silently removed, so accessing their members
+    fails at runtime.
 
 ### Usage
 

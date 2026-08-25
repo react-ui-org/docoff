@@ -1,4 +1,3 @@
-import initSwc from '@swc/wasm-web';
 import { CODE_EDITOR_CLASSNAME } from '../constants';
 import { createCodeSyntaxHighlighter } from '../_helpers/createCodeSyntaxHighlighter';
 import { createRootContainer } from '../_helpers/createRootContainer';
@@ -78,35 +77,21 @@ class DocoffReactPreview extends HTMLTextAreaElement {
     this.addEventListener('keydown', (e) => e.stopPropagation());
     this.addEventListener('keyup', (e) => e.stopPropagation());
 
-    // Initialize SWC
-    // A single SWC instance is shared between all instances of `docoff-react-preview`
-    if (window.swcInitPromise == null) {
-      window.swcInitPromise = initSwc({
-        moduleOrPath: window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-wasm-path'),
-      });
-    }
+    // Removes white space, renders and adjusts height
+    const initialRender = () => {
+      const previewRawCode = this.value.trim();
+      // No content can mean the HTML has not been parsed yet, and we must not update anything in such case
+      if (previewRawCode) {
+        this.value = previewRawCode;
+        render(container, previewRawCode, baseRawCode);
+        setHeight();
+      }
+    };
 
-    // Once SWC was initialized we can start rendering
-    window.swcInitPromise.then(() => {
-      // Removes white space, renders and adjusts height
-      const initialRender = () => {
-        const previewRawCode = this.value.trim();
-        // No content can mean the HTML has not been parsed yet, and we must not update anything in such case
-        if (previewRawCode) {
-          this.value = previewRawCode;
-          render(container, previewRawCode, baseRawCode);
-          setHeight();
-        }
-      };
-
-      // Update container when SWC is initialized
-      initialRender();
-      // Update container when child elements are parsed in case they were not yet parsed when SWC was initialized
-      const observer = new MutationObserver(initialRender);
-      observer.observe(this, { childList: true });
-
-      return undefined;
-    });
+    initialRender();
+    // Update container when child elements are parsed in case they were not yet parsed
+    const observer = new MutationObserver(initialRender);
+    observer.observe(this, { childList: true });
   }
 }
 

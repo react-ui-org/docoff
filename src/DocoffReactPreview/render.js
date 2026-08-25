@@ -1,6 +1,22 @@
-import { transformSync } from '@swc/wasm-web';
 import Prism from 'prismjs';
-import { getSwcTransformOptions } from './getSwcTransformOptions';
+import { transform } from 'sucrase';
+
+const TRANSFORM_OPTIONS = {
+  production: true,
+  transforms: ['jsx', 'typescript'],
+};
+
+const transformPreviewCode = (previewRawCode) => {
+  try {
+    // If multiple elements are entered we wrap the code in `React.Fragment` to prevent an error
+    // If it fails to parse (e.g. the content isn't plain JSX, e.g. React.createElement(() => {…})),
+    // fall back to the raw code.
+    return transform(`<>${previewRawCode}</>`, TRANSFORM_OPTIONS).code;
+  } catch (e) {
+    // If the code entered is not JSX we must attempt rendering without `React.Fragment`
+    return transform(previewRawCode, TRANSFORM_OPTIONS).code;
+  }
+};
 
 export const render = (container, previewRawCode, baseRawCode) => {
   // Update the text overlay content
@@ -23,17 +39,14 @@ export const render = (container, previewRawCode, baseRawCode) => {
 
   let scriptText;
   try {
-    const swcTransformOptions = getSwcTransformOptions();
-    const baseTransCode = transformSync(baseRawCode, swcTransformOptions).code;
+    const baseTransCode = transform(baseRawCode, TRANSFORM_OPTIONS).code;
 
     // We need to transform the preview code to be able to execute it.
     // It needs to be transformed in isolation so that in case of errors the message is clear and does not contain code
     // not written by the user.
-    const previewTransformedCode = transformSync(previewRawCode, swcTransformOptions).code;
+    const previewTransformedCode = transformPreviewCode(previewRawCode);
 
-    // We need to wrap the previewRawCode in a function as SWC can prepend inline some helpers functions
     // The `previewCodeGetter` function allows us to execute the desired code
-    // Helpers are inserted based on the `target` option, set it to `es5` to see them
     const previewTransCode = `const previewCodeGetter = () => ${previewTransformedCode}`;
 
     scriptText = `
@@ -60,7 +73,7 @@ export const render = (container, previewRawCode, baseRawCode) => {
       })();
     `;
   } catch (e) {
-    const errorText = e
+    const errorText = e.message
 
       // We need to escape backticks (`) as they are used to wrap the string
       .replaceAll('`', '\\`')
@@ -71,17 +84,19 @@ export const render = (container, previewRawCode, baseRawCode) => {
 
     // The `e.message` can be multiline, so we need to use backticks (`) around `errorText`.
     scriptText = `
-      ${codeViewParentElCode}
-      // way is to always create the element and React root anew.
-      codeViewParentEl.querySelector('#react-root')?.remove();
+      (() => {
+        ${codeViewParentElCode}
+        // way is to always create the element and React root anew.
+        codeViewParentEl.querySelector('#react-root')?.remove();
 
-      // Remove errors from previous renders
-      codeViewParentEl.querySelector('#error-root')?.remove();
+        // Remove errors from previous renders
+        codeViewParentEl.querySelector('#error-root')?.remove();
 
-      const errorMessageEl = document.createElement('div');
-      errorMessageEl.innerText = \`${errorText}\`;
-      errorMessageEl.id = 'error-root';
-      codeViewParentEl.appendChild(errorMessageEl);
+        const errorMessageEl = document.createElement('div');
+        errorMessageEl.innerText = \`${errorText}\`;
+        errorMessageEl.id = 'error-root';
+        codeViewParentEl.appendChild(errorMessageEl);
+      })();
     `;
   }
 
