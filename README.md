@@ -114,7 +114,7 @@ The props are presented alphabetically sorted regardless of the source of the de
 
 Beware, that some React related eslint rules do not always work with the more complicated inheritance constructs.
 
-#####  Files
+##### Files
 
 The files that are parsed for prop definition need to be of the following types:
 
@@ -128,7 +128,7 @@ The files that are parsed for prop definition need to be of the following types:
 
 Parsing of the *prop definition file* is not too elegant. As [react-docgen](https://github.com/reactjs/react-docgen) only supports parsing components, a fake component is created around these definitions. It is not a robust solution. If you run into problems, see the [source code](./src/DocoffReactProps/DocoffReactProps.js) to see what is going on.
 
-#####  Inheritance Rules
+##### Inheritance Rules
 
 Typically, there should be only one `React.Component` definition as the last file in the cascade. All files preceding it should be *prop definition files*.
 
@@ -164,9 +164,16 @@ To use this component:
 
 ### Using Docker
 
-**Run locally:** `docker compose up dev_server`
+The project ships a Dockerized development environment with the `devcontainer`,
+`node` and `playwright` services.
 
-**Open shell (access to `npm` etc.):** `docker compose run --rm node_shell`
+**Set up (once, on the host):** `bash ./setup.sh`
 
+**Run locally:** `docker compose up` — the dev server is served on
+`COMPOSE_START_PORT` (`8080` by default).
 
+**Open shell (access to `npm` etc.):** `docker compose exec devcontainer bash`
 
+See [docs/dev-environment.md](./docs/dev-environment.md) for the full setup and
+configuration reference, and [docs/ai-integration.md](./docs/ai-integration.md)
+for the bundled AI coding assistants and the Chrome-host MCP bridge.

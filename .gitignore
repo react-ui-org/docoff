@@ -1,2 +1,10 @@
+.env
+/docker-compose.yml
+/docker/docoff_devcontainer_local/*
+!/docker/docoff_devcontainer_local/Dockerfile.dist
 /node_modules
+/playwright-report
 /public/generated
+
+/.claude/settings.local.json
+/CLAUDE.local.md

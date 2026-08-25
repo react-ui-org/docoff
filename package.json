@@ -68,6 +68,7 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
+    "postinstall": "sh scripts/write-lockfile-hash.sh",
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
     "test": "npm run test:eslint && npm run test:jest",

@@ -1,0 +1,24 @@
+{
+  "name": "Docoff (${localWorkspaceFolderBasename})",
+  "initializeCommand": "bash ./setup.sh",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "devcontainer",
+  "remoteUser": "developer",
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [
+    "node:8080"
+  ],
+  "portsAttributes": {
+    "node:8080": {
+      "label": "Dev server",
+      "protocol": "http",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  }
+}

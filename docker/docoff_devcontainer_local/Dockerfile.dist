@@ -1,0 +1,4 @@
+# Image name `docoff_devcontainer` might differ based on Docker compose project name
+FROM docoff_devcontainer as docoff_devcontainer_local
+
+# Your additional setup for the local development can go here
