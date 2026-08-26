@@ -53,23 +53,30 @@ export const render = (container, previewRawCode, baseRawCode) => {
       (() => {
         ${baseTransCode}
         ${codeViewParentElCode}
-        // Remove existing element for cases that this a rerender.
-        // There is no way to pass React root between rerenders since we do not want to keep global state. So the only
-        // way is to always create the element and React root anew.
-        codeViewParentEl.querySelector('#react-root')?.remove();
-
         // Remove errors from previous renders
         codeViewParentEl.querySelector('#error-root')?.remove();
 
-        // We need to declare inner element as mounting React on <body> is not allowed
-        const reactRootEl = document.createElement('div');
-        reactRootEl.id = 'react-root';
+        // Reuse the element and React root from the previous render so that React can update the preview in place
+        // instead of remounting it, which would make the preview flicker on every change.
+        let reactRootEl = codeViewParentEl.querySelector('#react-root');
+        if (reactRootEl) {
+          // Show the preview again in case it was hidden by an error
+          reactRootEl.style.display = '';
+        } else {
+          // We need to declare inner element as mounting React on <body> is not allowed
+          reactRootEl = document.createElement('div');
+          reactRootEl.id = 'react-root';
 
-        codeViewParentEl.appendChild(reactRootEl);
-        reactRoot = ReactDOM.createRoot(reactRootEl);
+          codeViewParentEl.appendChild(reactRootEl);
+
+          // Each render runs in a fresh script element which is removed right away, so no variable survives until
+          // the next render. The element does survive, so the React root is stored on it to be found by the next
+          // render.
+          reactRootEl.reactRoot = ReactDOM.createRoot(reactRootEl);
+        }
 
         ${previewTransCode};
-        reactRoot.render(previewCodeGetter());
+        reactRootEl.reactRoot.render(previewCodeGetter());
       })();
     `;
   } catch (e) {
@@ -86,8 +93,12 @@ export const render = (container, previewRawCode, baseRawCode) => {
     scriptText = `
       (() => {
         ${codeViewParentElCode}
-        // way is to always create the element and React root anew.
-        codeViewParentEl.querySelector('#react-root')?.remove();
+        // The preview from the last successful render is only hidden, not removed, so that React can update it in
+        // place once the code is valid again. Removing it would remount the preview and make it flicker while typing.
+        const reactRootEl = codeViewParentEl.querySelector('#react-root');
+        if (reactRootEl) {
+          reactRootEl.style.display = 'none';
+        }
 
         // Remove errors from previous renders
         codeViewParentEl.querySelector('#error-root')?.remove();
