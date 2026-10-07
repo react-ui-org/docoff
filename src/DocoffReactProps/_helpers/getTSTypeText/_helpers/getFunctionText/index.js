@@ -1,0 +1,1 @@
+export { getFunctionText } from './getFunctionText';

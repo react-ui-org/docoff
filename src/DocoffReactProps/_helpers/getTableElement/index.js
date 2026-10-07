@@ -1,0 +1,1 @@
+export { getTableElement } from './getTableElement';

@@ -2,25 +2,28 @@ import { getPropsTable } from './_helpers/getPropsTable';
 
 class DocoffReactProps extends HTMLElement {
   static get observedAttributes() {
-    return ['src'];
+    return ['name', 'src'];
   }
 
-  async connectedCallback() {
-    const componentUrls = this.getSrcAttributeValues();
-    const data = await getPropsTable(componentUrls);
-    this.replaceChildren(data);
+  connectedCallback() {
+    this.render();
   }
 
-  async attributeChangedCallback() {
-    const componentUrls = this.getSrcAttributeValues();
-    const data = await getPropsTable(componentUrls);
-    this.replaceChildren(data);
+  attributeChangedCallback() {
+    this.render();
   }
 
-  getSrcAttributeValues() {
-    return this.attributes.src?.value
-      .split('|')
-      .map((url) => url.trim());
+  // The table is rendered once, even when the element is connected and its attributes are set at the same time
+  render() {
+    if (this.isRenderScheduled || !this.isConnected) {
+      return;
+    }
+
+    this.isRenderScheduled = true;
+    queueMicrotask(async () => {
+      this.isRenderScheduled = false;
+      this.replaceChildren(await getPropsTable(this.getAttribute('src'), this.getAttribute('name')));
+    });
   }
 }
 

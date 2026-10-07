@@ -72,7 +72,12 @@
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
     "test": "npm run test:eslint && npm run test:jest",
-    "test:eslint": "eslint --ext js,jsx src public/exampleJS",
+    "test:eslint": "eslint --ext js,jsx src",
     "test:jest": "jest"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(react-docgen|strip-indent|min-indent)/)"
+    ]
   }
 }

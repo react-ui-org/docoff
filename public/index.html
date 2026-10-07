@@ -158,44 +158,30 @@ React.createElement(() => {
 
       <h2><code>docoff-react-props</code></h2>
 
-      <p><code>&ltdocoff-react-props&gt;</code> renders the component prop definition table.</p>
-      <p>For JavaScript, the props can be loaded from multiple files. This allows for writing more DRY code when several components share same props.</p>
-      <p>There are simple rules for loading props from multiple files:</p>
-      <ul>
-        <li>Files get processed sequentially
-        <li>The result of merging all previous files is used as base when merging in the current file</li>
-        <li>When a prop is not defined in the current file, it will not be present in the merge result</li>
-        <li>When a prop is defined in the current file, with docblock description of the prop type definition, the definition from current file will be used</li>
-        <li>When a prop default value is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used, but with the default value from the current file</li>
-        <li>When a prop is defined in the current file, with no docblock description of the prop type definition, the definition from base will be used including default value</li>
-      </ul>
+      <p><code>&ltdocoff-react-props&gt;</code> renders the table of props of a component written in TypeScript.</p>
+      <p>The <code>src</code> attribute is the URL of a TypeScript file, the <code>name</code> attribute is the name of the component, or of the type, the table is rendered for.</p>
 
       <h3>Examples</h3>
       <p>Using <code>docoff-react-preview</code> :)</p>
 
-      <h4>Typescript</h4>
-      <code><pre>node_modules/.bin/react-docgen public/exampleTS/Greeting.tsx > Greeting.props.json</pre></code>
+      <h4>Component</h4>
 
       <textarea is="docoff-react-preview">
-<docoff-react-props src="/exampleTS/Greeting.props.json"></docoff-react-props>
+<docoff-react-props src="/exampleTS/Greeting.tsx" name="Greeting"></docoff-react-props>
       </textarea>
 
-      <h4>Relative URL with Overloading</h4>
-
-      <p>⚠️ Does not work with TypeScript</p>
+      <h4>Type</h4>
 
       <textarea is="docoff-react-preview">
-<docoff-react-props src="
-    /exampleJS/common.props.js
-    |/exampleJS/Greeting.jsx
-"></docoff-react-props>
+<docoff-react-props src="/exampleTS/Greeting.types.ts" name="GreetingProps"></docoff-react-props>
       </textarea>
 
       <h4>Absolute URL</h4>
 
       <textarea is="docoff-react-preview">
 <docoff-react-props
-    src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/components/Alert/Alert.jsx"
+    src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/components/Alert/Alert.tsx"
+    name="Alert"
 ></docoff-react-props>
       </textarea>
 

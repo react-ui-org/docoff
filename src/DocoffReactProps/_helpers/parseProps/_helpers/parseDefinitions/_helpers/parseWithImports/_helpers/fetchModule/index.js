@@ -1,0 +1,1 @@
+export { fetchModule } from './fetchModule';
