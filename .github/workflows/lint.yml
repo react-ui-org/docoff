@@ -1,0 +1,26 @@
+name: Lint
+
+on: [ pull_request ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.20'
+          cache: npm
+
+      - name: Print Node.js and npm version
+        run: node --version && npm --version
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm run test:eslint
