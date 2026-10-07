@@ -12,7 +12,7 @@ export const createOverrideTypeParser = (parse, parserOpts) => (text, start) => 
     const padding = ' '.repeat(Math.max(start - TYPE_ALIAS_PREFIX.length, 0));
 
     return parse(`${padding}${TYPE_ALIAS_PREFIX}${text}`, parserOpts).program.body[0].typeAnnotation;
-  } catch (error) {
+  } catch {
     // What is not a valid type is presented as it is written
     return {
       end: start + text.length,

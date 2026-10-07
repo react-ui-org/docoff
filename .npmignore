@@ -12,7 +12,7 @@
 .editorconfig
 .env
 .env.dist
-.eslintrc
+eslint.config.mjs
 .gitignore
 .mcp.json
 .nvmrc

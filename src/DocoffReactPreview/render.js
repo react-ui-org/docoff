@@ -12,7 +12,7 @@ const transformPreviewCode = (previewRawCode) => {
     // If it fails to parse (e.g. the content isn't plain JSX, e.g. React.createElement(() => {…})),
     // fall back to the raw code.
     return transform(`<>${previewRawCode}</>`, TRANSFORM_OPTIONS).code;
-  } catch (e) {
+  } catch {
     // If the code entered is not JSX we must attempt rendering without `React.Fragment`
     return transform(previewRawCode, TRANSFORM_OPTIONS).code;
   }
