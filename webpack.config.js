@@ -1,5 +1,4 @@
 const Path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
 const MAX_OUTPUT_SIZE_KB = 1600000;
@@ -38,13 +37,7 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  // Disabled, because `uglify-js` causes `react-docgen` to fail in Safari browser
-  // optimization: {
-  //   minimize: true,
-  //   // minimizer: [new TerserPlugin({
-  //   //   minify: TerserPlugin.uglifyJsMinify,
-  //   // })],
-  // },
+  // The default minimizer is used, as `uglify-js` causes `react-docgen` to fail in Safari browser
   output: {
     filename: '[name].js?v=__ASSET_VERSION__',
     path: Path.join(__dirname, 'public/generated'),
