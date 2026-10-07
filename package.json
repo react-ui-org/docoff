@@ -20,6 +20,15 @@
     "url": "https://github.com/react-ui-org/react-ui/issues"
   },
   "browser": "public/generated/bundle.js",
+  "files": [
+    "public/generated/bundle.js",
+    "public/generated/bundle.js.LICENSE.txt",
+    "public/main.css",
+    "public/shadow.css",
+    "scripts/write-lockfile-hash.sh",
+    "src",
+    "!src/**/*.test.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/react-ui-org/docoff"
