@@ -25,4 +25,4 @@ opencode.json
 package-lock.json
 RELEASING.md
 setup.sh
-webpack.config.babel.js
+webpack.config.js
