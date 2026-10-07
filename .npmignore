@@ -15,6 +15,7 @@
 .eslintrc
 .gitignore
 .mcp.json
+.nvmrc
 babel.config.js
 CLAUDE.md
 docker-compose.base.yml
