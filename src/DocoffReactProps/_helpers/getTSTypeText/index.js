@@ -1,0 +1,1 @@
+export { getTSTypeText } from './getTSTypeText';

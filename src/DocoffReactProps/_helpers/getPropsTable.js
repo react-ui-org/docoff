@@ -1,88 +1,52 @@
-import md from 'markdown-it';
-import * as docgen from 'react-docgen';
-import { basePropTypesReducer } from './basePropTypesReducer';
-import { derivedPropTypesReducer } from './derivedPropTypesReducer';
-import { getFakeComponentSrc } from './getFakeComponentSrc';
-import { getPropTypeHtml } from './getPropTypeHtml';
+import { getBasePath } from '../../_helpers/getBasePath';
+import { resolveUrl } from '../../_helpers/resolveUrl';
+import { evaluateTSType } from './evaluateTSType';
+import { getConfig } from './getConfig';
+import { getMessageElement } from './getMessageElement';
+import { getPackageUrls } from './getPackageUrls';
 import { getTableElement } from './getTableElement';
-import { getTSTypeHtml } from './getTSTypeHtml';
+import { getTypeProperties } from './getTypeProperties';
+import { parseProps } from './parseProps';
 
-const PROP_DEF_COMPONENT = 'DocoffReactPropDefComponent';
+const NAME_REGEX = /^[A-Za-z_$][\w$]*$/;
+const TYPESCRIPT_URL_REGEX = /\.tsx?$/;
 
-export const getPropsTable = async (componentUrls) => {
-  // Download the component source files and extract the information about the components
-  const componentInfos = await Promise.all(componentUrls.map(async (componentUrl) => {
-    const componentRes = await fetch(componentUrl);
-    if (componentRes.status !== 200) {
-      return undefined;
-    }
-
-    if (componentUrl.endsWith('.props.json')) {
-      const json = await componentRes.json();
-      return json['public/exampleTS/Greeting.tsx'];
-    }
-
-    const componentRawSrc = await componentRes.text();
-    const componentSrc = componentUrl.endsWith('.props.js')
-      ? getFakeComponentSrc(componentRawSrc, PROP_DEF_COMPONENT)
-      : componentRawSrc;
-
-    return docgen.parse(
-      componentSrc,
-      {
-        babelOptions: {
-          parserOpts: {
-            plugins: ['typescript', 'jsx'],
-          },
-        },
-        resolver: new docgen.builtinResolvers.FindAllDefinitionsResolver(),
-      },
-    );
-  }));
-
-  if (componentInfos.includes(undefined)) {
-    const errMessage = document.createElement('div');
-    errMessage.innerText = 'Resources could not be downloaded.';
-    return errMessage;
+/**
+ * Creates the table of props of the component, or of the type, exported from the file under the given name.
+ *
+ * @param {string|null} src The URL of the TypeScript file
+ * @param {string|null} name The name of the component or of the type
+ * @returns {Promise<HTMLElement>} The table, or a message when the table cannot be created
+ */
+export const getPropsTable = async (src, name) => {
+  if (!src || !name || !NAME_REGEX.test(name)) {
+    return getMessageElement('Attributes `src` and `name` are required.');
   }
 
-  // Merge the propType definitions
-  const propTypes = componentInfos.reduce(
-    (acc, info) => {
-      const derivedPropTypes = info[0].props;
-      const derivedPropNames = Object.keys(derivedPropTypes);
+  const basePath = getBasePath();
+  const config = getConfig();
+  const url = resolveUrl(document.baseURI, basePath, src);
+  if (!TYPESCRIPT_URL_REGEX.test(new URL(url).pathname)) {
+    return getMessageElement('Only TypeScript files are supported.');
+  }
 
-      return {
-        // Remove props not used in derived
-        ...(Object.keys(acc).reduce(
-          basePropTypesReducer(acc, derivedPropNames),
-          {},
-        )),
-        // Add props from derived
-        ...(derivedPropNames.reduce(
-          derivedPropTypesReducer(acc, derivedPropTypes),
-          {},
-        )),
-      };
-    },
-    {},
-  );
+  const response = await fetch(url).catch(() => null);
+  if (response?.status !== 200) {
+    return getMessageElement('Resources could not be downloaded.');
+  }
 
-  const table = getTableElement();
-  Object.keys(propTypes)
-    .sort()
-    .forEach((propName) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-          <th>${propName}${propTypes[propName].required ? '*' : ''}</th>
-          <td>
-            ${propTypes[propName]?.type ? getPropTypeHtml(propTypes[propName]?.type) : getTSTypeHtml(propTypes[propName]?.tsType)}
-          </td>
-          <td>${propTypes[propName].defaultValue ? `<pre><code>${propTypes[propName].defaultValue.value}</code></pre>` : ''}</td>
-          <td>${md().render(propTypes[propName].description)}</td>
-        `;
-      table.append(row);
-    });
+  try {
+    const packageUrls = getPackageUrls(document.baseURI, basePath, config.resolvePackages);
+    const props = await parseProps(await response.text(), url, name, packageUrls);
+    const properties = getTypeProperties(props.types.map((tsType) => evaluateTSType(tsType, config)));
 
-  return table;
+    return properties.length > 0
+      ? getTableElement(properties, props.defaultValues)
+      : getMessageElement(`No props of \`${name}\` were found.`);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+
+    return getMessageElement(`Props of \`${name}\` could not be read: ${error.message}`);
+  }
 };

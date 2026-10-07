@@ -90,77 +90,174 @@ In short, you need to:
 
 ## `docoff-react-props`
 
-This element renders a React component prop definition table.
+This element renders a table of props of a React component written in TypeScript.
 
 **Design decisions:**
 
-1. The aim was to strike a balance between sane API, technical possibilities and ease of use. Some solutions (e.g. the [fake component](./src/DocoffReactProps/_helpers/getFakeComponentSrc.js)) are not elegant, but they make this component more useful.
-2. It is opinionated as there was no way to make it useful without it. See the inheritance rules in the [Inheritance Rules](#inheritance-rules) section.
-3. Everything happens in browser to eliminate the need for a build pipe.
+1. Everything happens in browser to eliminate the need for a build pipe. The props are read directly from the TypeScript source files by [react-docgen](https://github.com/reactjs/react-docgen), the types are neither checked nor compiled.
+2. It is opinionated as there was no way to make it useful without it. The types are evaluated, so that the reader sees what a type consists of instead of how it is written. See [Type Evaluation](#type-evaluation).
 
 ### Usage
 
 See [index.html](./public/index.html) for a basic working example.
 
-#### Single Component Props
-
-To render props of a single React.Component:
-
 1. Include package dependencies:
     ```html
     <script src="/generated/bundle.js"></script>
     <link type="text/css" rel="stylesheet" href="main.css" />
     ```
-2. Use component the `<docoff-react-props>` element:
+2. Use the `<docoff-react-props>` element:
     ```html
-    <docoff-react-props data-src="https://raw.githubusercontent.com/react-ui-org/react-ui/master/src/components/CheckboxField/CheckboxField.jsx"></docoff-react-props>
+    <docoff-react-props src="/components/Button/Button.tsx" name="Button"></docoff-react-props>
     ```
 
-#### Props with Inheritance
+Both attributes are required:
 
-This element also provides some shortcuts to cascade prop type definitions. It allows using *prop definition files* separate from component definition. It is useful to avoid huge files or to have one prop definition used on several places.
+* `src` is the URL of a TypeScript file (`*.ts` or `*.tsx`).
+* `name` is the name of what the table is rendered for. It is either:
+  * a component defined in the file. Its props are read from the type of its props, their default values from the default values of the parameters of the component.
+  * a type exported from the file, e.g. `<docoff-react-props src="/components/Button/Button.types.ts" name="ButtonProps">`, or `default` for the type exported by default. Its properties are presented as props, without default values.
 
-The props are presented alphabetically sorted regardless of the source of the definition.
+### Imported Types
 
-Beware, that some React related eslint rules do not always work with the more complicated inheritance constructs.
+The type of the props can be defined in a separate file. Types imported using relative imports are resolved, the imported files are downloaded from URL relative to the file that imports them. When the import does not specify file extension, `.ts` and `.tsx` files are tried, first as a file, then as an `index` file in a directory.
 
-##### Files
+The requests for the tried files that do not exist fail. They can be avoided by reading the type of the props from a single file that has no relative imports, e.g. bundled type declarations (`*.d.ts`) of a library. Such a file contains no component, so `name` must be the type of the props, and the props are presented without default values.
 
-The files that are parsed for prop definition need to be of the following types:
+Types imported from packages are not resolved, only their name is presented, unless the package is listed in the `resolvePackages` option. The option defines where the types of the package are placed, which is either:
 
-1. `React.Component` that can be parsed by [react-docgen](https://github.com/reactjs/react-docgen) - in short, this file must import and depend on `React`. It must:
-   1. Use the `*.js` or `*.jsx` suffix
-   2. Define only one component per file
-2. A *prop definition file* - it must not create a `React.Component` as it only defines `propTypes` and `defaultProps`. It must:
-   1. Use the `*.props.js` suffix
-   2. Define constant `defaultProps` (even when empty)
-   3. Define constant `propTypes` (even when empty)
+* a folder. The path that follows the name of the package in the import is appended to its URL, e.g. `@scope/package/src/components/Button` is downloaded from `https://example.com/package/src/components/Button`, the same way relative imports are.
+* a file (`*.ts`, `*.tsx`, `*.d.ts`), e.g. the bundled type declarations of the package. The types are looked up by their names among the exports of the file, regardless of the path they are imported from.
 
-Parsing of the *prop definition file* is not too elegant. As [react-docgen](https://github.com/reactjs/react-docgen) only supports parsing components, a fake component is created around these definitions. It is not a robust solution. If you run into problems, see the [source code](./src/DocoffReactProps/DocoffReactProps.js) to see what is going on.
+```html
+<script>
+  window.docoffConfig = {
+    reactProps: {
+      resolvePackages: {
+        '@scope/package': 'https://example.com/package',
+        '@scope/another-package': 'https://example.com/another-package.d.ts',
+      },
+    },
+  };
+</script>
+```
 
-##### Inheritance Rules
+Beware, that:
 
-Typically, there should be only one `React.Component` definition as the last file in the cascade. All files preceding it should be *prop definition files*.
+1. All the imported files must be available for download just as the file in the `src` attribute is.
+2. Interfaces are resolved the same way as types are, but an interface declared more than once is not merged.
 
-There is no clean way to achieve full inheritance so for things to work the following rules must be observed:
+### Type Evaluation
 
-1. The props are overloaded one at a time in the sequence as defined.
-2. The component must define all `propTypes` and `defaultProps`, that it uses. However, they can be references to definitions in a *prop definition file*. **Destructuring is not supported.**
-3. If prop type has a docblock description its definition and description will be used. Otherwise, the definition and description from the referenced *prop definition file* will be used.
+Types are evaluated before they are presented. Types that cannot be evaluated are presented as they are written, with the types they consist of evaluated, e.g. `Promise<Direction>` is presented as `Promise<'asc' | 'desc'>`.
 
-#### Usage
+| What is evaluated | Example | Presented as |
+|---|---|---|
+| Types listed in `evaluateTypes` | `Partial<Record<'top' \| 'bottom', number>>` | object with optional `top` and `bottom` properties |
+| Functions (`expandFunctionSignatures`) | `(direction: Direction) => void` | `(direction: 'asc' \| 'desc') => void` |
+| Unions consisting only of unions of literals (`mergeLiteralUnions`) | `ActionColor \| FeedbackColor` | single union of all the values |
+| Intersections of objects (`mergeObjectIntersections`) | `Position & Size` | single object with properties of both |
 
-To use this component:
+Besides the utility types, `evaluateTypes` lists `keyof` for the `keyof` operator, e.g. `keyof Props`, and `indexedAccess` for indexed access types, e.g. `Props['size']`. An optional property read by indexed access type can be `undefined`, the same way as in TypeScript.
 
-1. Include package dependencies:
-    ```html
-    <script src="/generated/bundle.js"></script>
-    <link type="text/css" rel="stylesheet" href="main.css" />
-    ```
-2. Use component:
-    ```html
-    <docoff-react-props data-src="/exampleJS/common.props.js|/exampleJS/BaseGreeting.jsx|/exampleJS/MyGreeting.jsx"></docoff-react-props>
-    ```
+Functions whose parameters cannot be matched to their types, e.g. generic functions, are presented as they are written. Unions that contain other types than literals are kept as they are, so that the values stay grouped. When more objects of an intersection define the same property, the property is of the intersection of the types of its definitions, e.g. `ReactNode & string`, and it is required when any of its definitions is required. The same types are presented only once.
+
+The props themselves are the properties of the evaluated type of the props, so the type can be composed, e.g. `Omit<LibraryButtonProps, 'label'> & { label: string }`. The parts of the type that cannot be resolved, e.g. HTML attributes defined by React, are left out.
+
+### Configuration
+
+The element is configured by the `reactProps` option of the `window.docoffConfig` object. When it is not defined, the following default configuration is used. For the `basePath` option, see [Base Path](#base-path).
+
+```js
+window.docoffConfig = {
+  basePath: undefined,
+  reactProps: {
+    evaluateTypes: {
+      Awaited: true,
+      Capitalize: true,
+      Exclude: true,
+      Extract: true,
+      Lowercase: true,
+      NoInfer: true,
+      NonNullable: true,
+      Omit: true,
+      Partial: true,
+      Pick: true,
+      PropsWithChildren: true,
+      Readonly: true,
+      ReadonlyArray: true,
+      Record: true,
+      Required: true,
+      Uncapitalize: true,
+      Uppercase: true,
+      indexedAccess: true,
+      keyof: true,
+    },
+    expandFunctionSignatures: true,
+    mergeLiteralUnions: true,
+    mergeObjectIntersections: true,
+    resolvePackages: {},
+  },
+};
+```
+
+To change the configuration, define `window.docoffConfig` **before** the Docoff bundle is loaded. Only the options that differ from the default configuration need to be defined:
+
+```html
+<script>
+  window.docoffConfig = {
+    reactProps: {
+      evaluateTypes: {
+        // Do not evaluate the type, only its type arguments
+        Omit: false,
+        // Evaluate the type using a custom function
+        Partial: (tsType) => tsType.elements[0],
+        // Evaluate a type that is not evaluated by default
+        ReactNode: () => ({ name: 'node' }),
+      },
+      mergeLiteralUnions: false,
+    },
+  };
+</script>
+```
+
+The key in `evaluateTypes` is the name of the type, the value is one of:
+
+* `true` to evaluate the type the default way. It only has an effect for the types of the default configuration.
+* `false` to present the type as it is written, with its type arguments evaluated, e.g. `Omit<{ top: number; bottom?: number }, 'bottom'>`.
+* A function to evaluate the type the custom way. It gets the type as described by [react-docgen](https://github.com/reactjs/react-docgen), with its type arguments (`elements`) already evaluated, and it returns the type to present in the same format. When it returns nothing, the type is presented the same way as with `false`.
+
+### Type Overriding
+
+When a type cannot be evaluated, or the way it is written is of no use to the reader, the type to present can be defined by the `@docoffOverrideType` tag. The tag can be used in the comment of a type alias, so that it applies to all props of that type, or in the comment of a prop:
+
+```ts
+/**
+ * Either one of the predefined values or any valid CSS width.
+ *
+ * @docoffOverrideType PredefinedWidth | string
+ */
+export type Width = PredefinedWidth | (string & NonNullable<unknown>);
+```
+
+The tag is followed by a type that is evaluated instead of the original one, so it can refer to other types available in the file. What is not a valid type, e.g. `@docoffOverrideType any HTML element`, is presented as it is written. The tag is not shown in the description of the prop.
+
+## Base Path
+
+When the site is not deployed at the root of the domain, URLs starting with a slash do not point to the site. The `basePath` option defines the path the site is deployed at. The following URLs are resolved against it when they start with a slash:
+
+* the `src` attribute of the `docoff-react-props` element,
+* the URLs in its `resolvePackages` option.
+
+Define `window.docoffConfig` **before** the Docoff bundle is loaded:
+
+```html
+<script>
+  window.docoffConfig = {
+    basePath: '/docs/',
+  };
+</script>
+```
 
 ## Development
 

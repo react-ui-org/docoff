@@ -1,0 +1,1 @@
+export { propsTypeHandler } from './propsTypeHandler';

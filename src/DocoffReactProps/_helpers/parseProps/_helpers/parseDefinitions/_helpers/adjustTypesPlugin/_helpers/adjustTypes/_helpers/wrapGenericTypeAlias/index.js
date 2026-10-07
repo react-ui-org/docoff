@@ -1,0 +1,1 @@
+export { wrapGenericTypeAlias } from './wrapGenericTypeAlias';

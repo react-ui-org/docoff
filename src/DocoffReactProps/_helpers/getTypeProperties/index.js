@@ -1,0 +1,1 @@
+export { getTypeProperties } from './getTypeProperties';

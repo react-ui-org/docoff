@@ -1,0 +1,1 @@
+export { getWrittenParameters } from './getWrittenParameters';
