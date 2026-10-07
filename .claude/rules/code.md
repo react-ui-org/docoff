@@ -6,7 +6,7 @@
 * Keep changes minimal and focused.
 * Follow the project formatting and style sources:
   [.editorconfig](../../.editorconfig) (general),
-  [.eslintrc](../../.eslintrc) (JavaScript/JSX).
+  [eslint.config.mjs](../../eslint.config.mjs) (JavaScript/JSX).
 * Only fix linting/formatting issues in files you created or modified for the
   current task. Do not fix pre-existing issues outside that scope.
 * Keep comments simple and use terminology and language matching repository
