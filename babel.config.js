@@ -1,16 +1,22 @@
 module.exports = {
   presets: [
+    '@babel/preset-env',
+    '@babel/preset-typescript',
     [
-      '@babel/preset-env',
+      '@babel/preset-react',
       {
-        corejs: 3,
-        useBuiltIns: 'usage',
+        runtime: 'classic',
       },
     ],
-    '@babel/preset-typescript',
-    '@babel/preset-react',
   ],
   plugins: [
+    [
+      'babel-plugin-polyfill-corejs3',
+      {
+        method: 'usage-global',
+        version: require('core-js/package.json').version,
+      },
+    ],
     ['prismjs', {
       languages: ['javascript', 'jsx'],
       theme: 'twilight',
