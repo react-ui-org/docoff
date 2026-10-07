@@ -1,3 +1,5 @@
+import { getBasePath } from '../../_helpers/getBasePath';
+import { resolveUrl } from '../../_helpers/resolveUrl';
 import { LIVE_PREVIEW_CLASSNAME } from '../../constants';
 
 export const createLivePreview = () => {
@@ -30,12 +32,12 @@ export const createLivePreview = () => {
   livePreview.shadowRoot.appendChild(styles);
 
   // Add custom preview CSS link
-  const previewCss = window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-css');
+  const previewCss = window.getComputedStyle(document.body).getPropertyValue('--docoff-preview-css').trim();
   if (previewCss) {
     const cssLink = document.createElement('link');
     cssLink.rel = 'stylesheet';
     cssLink.type = 'text/css';
-    cssLink.href = previewCss;
+    cssLink.href = resolveUrl(document.baseURI, getBasePath(), previewCss);
     livePreview.shadowRoot.appendChild(cssLink);
   }
 

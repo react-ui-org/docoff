@@ -246,6 +246,7 @@ The tag is followed by a type that is evaluated instead of the original one, so 
 
 When the site is not deployed at the root of the domain, URLs starting with a slash do not point to the site. The `basePath` option defines the path the site is deployed at. The following URLs are resolved against it when they start with a slash:
 
+* the CSS file of live previews defined by the `--docoff-preview-css` custom property,
 * the `src` attribute of the `docoff-react-props` element,
 * the URLs in its `resolvePackages` option.
 
