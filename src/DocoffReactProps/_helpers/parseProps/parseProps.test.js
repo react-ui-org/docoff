@@ -292,6 +292,18 @@ const files = {
       labelPosition?: ToggleLabelPosition;
     };
 
+    declare const avatarSizes: {
+      small: number;
+      large: number;
+    };
+    export type AvatarSize = keyof typeof avatarSizes;
+    export type AvatarProps = {
+      /**
+       * Size of the avatar.
+       */
+      size?: AvatarSize;
+    };
+
     export {};
   `,
   'https://cdn.test/library/src/components/Toggle/Toggle.types.ts': `
@@ -502,6 +514,17 @@ describe('functionality', () => {
     expect(Object.keys(await getProps('https://cdn.test/library.d.ts', 'ToggleProps')))
       .toEqual(['disabled', 'label', 'labelPosition']);
     expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('evaluates `keyof typeof` of value declared without initial value in type declarations', async () => {
+    expect(await getProps('https://cdn.test/library.d.ts', 'AvatarProps')).toEqual({
+      size: {
+        defaultValue: undefined,
+        description: 'Size of the avatar.',
+        required: false,
+        type: '\'small\' | \'large\'',
+      },
+    });
   });
 
   it('looks up relative imports of the component in the given file instead of downloading them', async () => {
