@@ -7,6 +7,17 @@ describe('functionality', () => {
     expect(getModuleUrl('../../types', FILENAME, {})).toEqual('https://example.com/types');
   });
 
+  it('looks up relative import in the file given for the file with the import', () => {
+    expect(getModuleUrl('../../types', FILENAME, {}, { [FILENAME]: 'https://example.com/library.d.ts' }))
+      .toEqual('https://example.com/library.d.ts');
+  });
+
+  it('resolves relative import of another file against it', () => {
+    expect(getModuleUrl('./Button', 'https://example.com/components/Button/index.ts', {}, {
+      [FILENAME]: 'https://example.com/library.d.ts',
+    })).toEqual('https://example.com/components/Button/Button');
+  });
+
   it('does not resolve import from package that is not listed', () => {
     expect(getModuleUrl('react', FILENAME, { '@scope/package': 'https://cdn.test/package' })).toBeNull();
   });

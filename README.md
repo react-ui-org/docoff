@@ -122,7 +122,19 @@ Both attributes are required:
 
 The type of the props can be defined in a separate file. Types imported using relative imports are resolved, the imported files are downloaded from URL relative to the file that imports them. When the import does not specify file extension, `.ts` and `.tsx` files are tried, first as a file, then as an `index` file in a directory.
 
-The requests for the tried files that do not exist fail. They can be avoided by reading the type of the props from a single file that has no relative imports, e.g. bundled type declarations (`*.d.ts`) of a library. Such a file contains no component, so `name` must be the type of the props, and the props are presented without default values.
+The requests for the tried files that do not exist fail. They can be avoided by the `resolveRelativeImports` option, the URL of a single file that contains all the types, e.g. bundled type declarations (`*.d.ts`) of a library. The relative imports of the file in the `src` attribute are then not downloaded, the imported types are looked up by their names among the exports of that file instead, regardless of the path they are imported from. When the file cannot be downloaded, e.g. during development before it is built, the relative imports are downloaded as usual. The default values of the props are still read from the component:
+
+```html
+<script>
+  window.docoffConfig = {
+    reactProps: {
+      resolveRelativeImports: '/library.d.ts',
+    },
+  };
+</script>
+```
+
+The type of the props can also be read from such a file directly. It contains no component, so `name` must be the type of the props, and the props are presented without default values.
 
 Types imported from packages are not resolved, only their name is presented, unless the package is listed in the `resolvePackages` option. The option defines where the types of the package are placed, which is either:
 
@@ -197,6 +209,7 @@ window.docoffConfig = {
     mergeLiteralUnions: true,
     mergeObjectIntersections: true,
     resolvePackages: {},
+    resolveRelativeImports: undefined,
   },
 };
 ```
@@ -248,7 +261,7 @@ When the site is not deployed at the root of the domain, URLs starting with a sl
 
 * the CSS file of live previews defined by the `--docoff-preview-css` custom property,
 * the `src` attribute of the `docoff-react-props` element,
-* the URLs in its `resolvePackages` option.
+* the URLs in its `resolvePackages` and `resolveRelativeImports` options.
 
 Define `window.docoffConfig` **before** the Docoff bundle is loaded:
 

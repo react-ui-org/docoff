@@ -37,7 +37,9 @@ export const getPropsTable = async (src, name) => {
 
   try {
     const packageUrls = getPackageUrls(document.baseURI, basePath, config.resolvePackages);
-    const props = await parseProps(await response.text(), url, name, packageUrls);
+    const relativeImportsUrl = config.resolveRelativeImports
+      && resolveUrl(document.baseURI, basePath, config.resolveRelativeImports);
+    const props = await parseProps(await response.text(), url, name, packageUrls, relativeImportsUrl);
     const properties = getTypeProperties(props.types.map((tsType) => evaluateTSType(tsType, config)));
 
     return properties.length > 0

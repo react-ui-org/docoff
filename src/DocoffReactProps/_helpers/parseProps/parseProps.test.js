@@ -231,6 +231,22 @@ const files = {
       <h1 id={id}>{level}{icon?.name}</h1>
     );
   `,
+  'http://localhost/components/Switch/Switch.tsx': `
+    import React from 'react';
+    import type { ToggleProps } from '../Toggle';
+
+    export const Switch = ({ disabled = false, label }: ToggleProps) => <label>{label}</label>;
+  `,
+  'http://localhost/components/Switch/Switch.types.ts': `
+    import type { ToggleLabelPosition } from '../Toggle';
+
+    export type SwitchProps = {
+      /**
+       * Side of the label.
+       */
+      labelPosition?: ToggleLabelPosition;
+    };
+  `,
   'http://localhost/components/Toggle/Toggle.types.ts': `
     import type { ToggleProps as LibraryToggleProps } from '@library/ui/src/components/Toggle';
 
@@ -309,8 +325,8 @@ const FORM_LAYOUT_TYPES_URL = 'http://localhost/components/FormLayout/FormLayout
 const TOGGLE_TYPES_URL = 'http://localhost/components/Toggle/Toggle.types.ts';
 
 // Presents the props the way they are presented in the table
-const getProps = async (url, name, resolvePackages) => {
-  const props = await parseProps(files[url], url, name, resolvePackages);
+const getProps = async (url, name, resolvePackages, resolveRelativeImports) => {
+  const props = await parseProps(files[url], url, name, resolvePackages, resolveRelativeImports);
   const properties = getTypeProperties(props.types.map((tsType) => evaluateTSType(tsType)));
 
   return Object.fromEntries(properties.map((property) => [
@@ -486,6 +502,58 @@ describe('functionality', () => {
     expect(Object.keys(await getProps('https://cdn.test/library.d.ts', 'ToggleProps')))
       .toEqual(['disabled', 'label', 'labelPosition']);
     expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('looks up relative imports of the component in the given file instead of downloading them', async () => {
+    expect(await getProps(
+      'http://localhost/components/Switch/Switch.tsx',
+      'Switch',
+      {},
+      'https://cdn.test/library.d.ts',
+    )).toEqual({
+      disabled: {
+        defaultValue: 'false',
+        description: 'If `true`, the input will be disabled.',
+        required: false,
+        type: 'boolean',
+      },
+      label: {
+        defaultValue: undefined,
+        description: 'Label of the input.',
+        required: true,
+        type: 'ReactNode',
+      },
+      labelPosition: {
+        defaultValue: undefined,
+        description: 'Placement of the label.',
+        required: false,
+        type: '\'before\' | \'after\'',
+      },
+    });
+    expect(global.fetch.mock.calls.map(([url]) => url)).toEqual(['https://cdn.test/library.d.ts']);
+  });
+
+  it('downloads relative imports when the given file cannot be downloaded', async () => {
+    expect(Object.keys(await getProps(BUTTON_URL, 'Button', {}, 'https://cdn.test/missing.d.ts')))
+      .toEqual(['color', 'icon', 'label', 'size']);
+    expect(getFetchedUrls()).toContain(BUTTON_TYPES_URL);
+  });
+
+  it('looks up relative imports of the file with the type in the given file', async () => {
+    expect(await getProps(
+      'http://localhost/components/Switch/Switch.types.ts',
+      'SwitchProps',
+      {},
+      'https://cdn.test/library.d.ts',
+    )).toEqual({
+      labelPosition: {
+        defaultValue: undefined,
+        description: 'Side of the label.',
+        required: false,
+        type: '\'before\' | \'after\'',
+      },
+    });
+    expect(global.fetch.mock.calls.map(([url]) => url)).toEqual(['https://cdn.test/library.d.ts']);
   });
 
   it('resolves types that `react-docgen` does not recognize', async () => {
