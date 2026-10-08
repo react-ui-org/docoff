@@ -12,10 +12,12 @@ const TYPE_NAME = 'DocoffReactPropsTypeProps';
  * @param {string} url The absolute URL of the file
  * @param {string} name The name of the type exported from the file, or `default`
  * @param {Object} resolvePackages The URLs of the packages to resolve by the names of the packages
+ * @param {Object} relativeImportUrls The URLs of the files to look up relative imports in, by the URLs of the files
+ *   with the imports
  * @param {Map} modules The files that have already been downloaded by their URL, including the file itself
  * @returns {Promise<Object>} The made-up component as described by `react-docgen`
  */
-export const findType = async (url, name, resolvePackages, modules) => {
+export const findType = async (url, name, resolvePackages, relativeImportUrls, modules) => {
   const typeComponentSource = `
     import type { ${name} as ${TYPE_NAME} } from './${url.split('/').pop()}';
 
@@ -33,6 +35,7 @@ export const findType = async (url, name, resolvePackages, modules) => {
     typeComponentSource,
     new URL(TYPE_COMPONENT_FILE_NAME, url).href,
     resolvePackages,
+    relativeImportUrls,
     downloadedModules,
   );
 

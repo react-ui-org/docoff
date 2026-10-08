@@ -4,12 +4,15 @@ import { RESOLVE_EXTENSIONS } from '../../../constants';
  * @param {string} source What is imported, e.g. `./Button.types` or `@scope/package/src/components/Button`
  * @param {string} filename The URL of the file with the import
  * @param {Object} resolvePackages The URLs of the packages to resolve by the names of the packages
+ * @param {Object} relativeImportUrls The URLs of the files to look up relative imports in, by the URLs of the files
+ *   with the imports
  * @returns {string|null} The URL of the import, typically without file extension. `null` when the import
  *   is not to be resolved.
  */
-export const getModuleUrl = (source, filename, resolvePackages) => {
+export const getModuleUrl = (source, filename, resolvePackages, relativeImportUrls = {}) => {
   if (source.startsWith('.')) {
-    return new URL(source, filename).href;
+    // A file contains everything the relative imports point to, so it is used regardless of the imported path
+    return relativeImportUrls[filename] ?? new URL(source, filename).href;
   }
 
   const packageName = Object.keys(resolvePackages)

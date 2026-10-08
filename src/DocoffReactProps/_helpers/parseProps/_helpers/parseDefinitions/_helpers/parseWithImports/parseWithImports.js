@@ -13,15 +13,17 @@ import { restoreTypeNames } from './_helpers/restoreTypeNames';
  * @param {string} url The absolute URL of the source file
  * @param {Object} options The options of `react-docgen`
  * @param {Object} resolvePackages The URLs of the packages to resolve by the names of the packages
+ * @param {Object} relativeImportUrls The URLs of the files to look up relative imports in, by the URLs of the files
+ *   with the imports
  * @param {Map} modules The files that have already been downloaded by their URL
  * @returns {Promise<Object[]>} The components found in the source code as described by `react-docgen`
  */
-export const parseWithImports = async (source, url, options, resolvePackages, modules) => {
+export const parseWithImports = async (source, url, options, resolvePackages, relativeImportUrls, modules) => {
   const missingModuleUrls = new Set();
   const optionsWithImporter = {
     ...options,
     filename: url,
-    importer: createUrlImporter(modules, missingModuleUrls, resolvePackages),
+    importer: createUrlImporter(modules, missingModuleUrls, resolvePackages, relativeImportUrls),
   };
 
   const parse = async () => {

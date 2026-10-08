@@ -13,16 +13,22 @@ import { setUniqueTypeName } from './_helpers/setUniqueTypeName';
  * @param {Map} modules The downloaded files by URL of the import, `null` if the file could not be downloaded
  * @param {Set} missingModuleUrls The URLs of the imports that have not been downloaded yet, filled in by the importer
  * @param {Object} resolvePackages The URLs of the packages to resolve by the names of the packages
+ * @param {Object} relativeImportUrls The URLs of the files to look up relative imports in, by the URLs of the files
+ *   with the imports
  * @returns {Function} The importer
  */
-export const createUrlImporter = (modules, missingModuleUrls, resolvePackages) => {
+export const createUrlImporter = (modules, missingModuleUrls, resolvePackages, relativeImportUrls) => {
   let importedTypesCount = 0;
 
   const resolveImportedValue = (path, name, file, seen = new Set()) => {
     const source = path.node.source?.value;
     const { filename } = file.opts;
 
-    const moduleUrl = source && filename ? getModuleUrl(source, filename, resolvePackages) : null;
+    // When the file to look up relative imports in cannot be downloaded, the imported files are downloaded instead
+    const availableRelativeImportUrls = modules.get(relativeImportUrls[filename]) === null ? {} : relativeImportUrls;
+    const moduleUrl = source && filename
+      ? getModuleUrl(source, filename, resolvePackages, availableRelativeImportUrls)
+      : null;
     if (moduleUrl === null) {
       return null;
     }

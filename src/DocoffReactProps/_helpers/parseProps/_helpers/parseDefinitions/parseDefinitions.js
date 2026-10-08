@@ -9,10 +9,12 @@ import { propsTypeHandler } from './_helpers/propsTypeHandler';
  * @param {string} source The source code
  * @param {string} url The absolute URL of the source file
  * @param {Object} resolvePackages The URLs of the packages to resolve by the names of the packages
+ * @param {Object} relativeImportUrls The URLs of the files to look up relative imports in, by the URLs of the files
+ *   with the imports
  * @param {Map} modules The files that have already been downloaded by their URL
  * @returns {Promise<Object[]>} The components as described by `react-docgen`, each with `propsTypes`
  */
-export const parseDefinitions = async (source, url, resolvePackages, modules = new Map()) => {
+export const parseDefinitions = async (source, url, resolvePackages, relativeImportUrls, modules = new Map()) => {
   const options = {
     babelOptions: {
       // The source code is parsed on its own, Babel config files must never be looked up
@@ -28,7 +30,7 @@ export const parseDefinitions = async (source, url, resolvePackages, modules = n
   };
 
   try {
-    return await parseWithImports(source, url, options, resolvePackages, modules);
+    return await parseWithImports(source, url, options, resolvePackages, relativeImportUrls, modules);
   } catch (error) {
     // A file with no component, e.g. a file with types only, is not an error
     if (error.code === docgen.ERROR_CODES.MISSING_DEFINITION) {
