@@ -1,10 +1,36 @@
-.env
-/docker-compose.yml
-/docker/docoff_devcontainer_local/*
-!/docker/docoff_devcontainer_local/Dockerfile.dist
-/node_modules
+# Project
 /playwright-report
 /public/generated
 
+# Dependencies
+/node_modules
+
+# Local environment
+/.env*
+!/.env.dist
+!/.env.*.dist
+/docker-compose.yml
+/docker-compose.yml.backup
+/docker/docoff_devcontainer_local/*
+!/docker/docoff_devcontainer_local/Dockerfile.dist
+
+# Local AI assistant files
 /.claude/settings.local.json
 /CLAUDE.local.md
+
+# IDE
+/.idea/*
+!/.idea/runConfigurations/
+/*/**/.idea/
+/.vscode/*
+!/.vscode/tasks.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+npm-debug.log*
+
+# Placeholders of ignored directories
+!.gitkeep
