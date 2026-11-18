@@ -281,7 +281,9 @@ Define `window.docoffConfig` **before** the Docoff bundle is loaded:
 
 **Build:** `npm run build`
 
-**Test:** `npm test`
+**Lint:** `npm run lint`
+
+**Test:** `npm run test:jest`
 
 ### Using Docker
 

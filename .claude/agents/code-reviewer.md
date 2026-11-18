@@ -81,7 +81,7 @@ whether it does so correctly, cleanly, safely, and with tests.
 Easy-to-miss invariants beyond the generic checks above:
 
 * **Lint & test gate** ([CLAUDE.md](../../CLAUDE.md#commands)): remind the author
-  to run `npm run build` and `npm test` (ESLint + Jest) before committing, plus
+  to run `npm run build`, `npm run lint` and `npm run test:jest` before committing, plus
   any Playwright tests the change touches.
 * **Git hygiene** ([git.md](../rules/git.md)): no push or remote change without
   approval; commit/PR subjects imperative English with backticked symbols and a
@@ -101,7 +101,7 @@ Group findings by severity. For each:
 - [design] src/foo.js:7 (code.md) — shortened variable name.
 
 ## Reminders
-- Run `npm run build` and `npm test` before committing.
+- Run `npm run build`, `npm run lint` and `npm run test:jest` before committing.
 ```
 
 End with a one-line verdict: APPROVE / APPROVE WITH NITS / REQUEST CHANGES.

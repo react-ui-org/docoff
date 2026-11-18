@@ -28,9 +28,8 @@ Run these inside the `devcontainer` (from the host, prefix with
 | Install JS                  | `npm ci`                    |
 | Build library               | `npm run build`             |
 | Start dev server            | `npm start`                 |
-| Run all checks (lint+tests) | `npm test`                  |
-| Run ESLint only             | `npm run test:eslint`       |
-| Run Jest only               | `npm run test:jest`         |
+| Run ESLint                  | `npm run lint`              |
+| Run Jest                    | `npm run test:jest`         |
 
 Notes:
 

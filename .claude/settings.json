@@ -13,8 +13,7 @@
       "Bash(npm run build:*)",
       "Bash(npm start)",
       "Bash(npm run start:*)",
-      "Bash(npm test)",
-      "Bash(npm run test:eslint:*)",
+      "Bash(npm run lint:*)",
       "Bash(npm run test:jest:*)",
       "Bash(npm run test:playwright:*)"
     ]

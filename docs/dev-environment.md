@@ -72,10 +72,11 @@ docker compose exec devcontainer <your shell>   # e.g. bash / fish / zsh
 From inside the `devcontainer`:
 
 ```bash
-npm ci          # install dependencies
-npm run build   # build the library
-npm start       # start the webpack dev server on COMPOSE_WEB_SERVER_PORT (21040)
-npm test        # ESLint + Jest
+npm ci             # install dependencies
+npm run build      # build the library
+npm start          # start the webpack dev server on COMPOSE_WEB_SERVER_PORT (21040)
+npm run lint       # ESLint
+npm run test:jest  # Jest
 ```
 
 To have the `node` container install, build and serve automatically on start,
