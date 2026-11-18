@@ -25,7 +25,7 @@
     "public/generated/bundle.js.LICENSE.txt",
     "public/main.css",
     "public/shadow.css",
-    "scripts/write-lockfile-hash.sh",
+    "scripts/writeLockfileHash.sh",
     "src",
     "!src/**/*.test.js"
   ],
@@ -84,7 +84,7 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "postinstall": "sh scripts/write-lockfile-hash.sh",
+    "postinstall": "sh scripts/writeLockfileHash.sh",
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
     "test": "npm run test:eslint && npm run test:jest",
