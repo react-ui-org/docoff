@@ -17,7 +17,7 @@ This is useful for verifying the rendered component previews, taking
 screenshots, and interactively debugging the running dev server in a real
 browser.
 
-The wiring lives in the [`scripts/mcps/chrome-host/`](../scripts/mcps/chrome-host/)
+The wiring lives in the [`tools/agents/mcps/chrome-host/`](../tools/agents/mcps/chrome-host/)
 directory and works on macOS and Linux.
 
 ### Setup
@@ -31,7 +31,7 @@ by default and the `node` service needs a host-gateway mapping.
 
 The host-gateway mapping is added automatically on native Docker Engine as part
 of the project's setup: `setup.sh` runs
-`scripts/mcps/chrome-host/mcp-setup.sh`.
+`tools/agents/mcps/chrome-host/mcp-setup.sh`.
 
 #### Manual setup
 
@@ -58,7 +58,7 @@ options.
    (not from inside the `devcontainer`):
 
     ```bash
-    ./scripts/mcps/chrome-host/start-host-chrome.sh
+    ./tools/agents/mcps/chrome-host/start-host-chrome.sh
     ```
 
    A dedicated browser window opens using a throwaway profile, so your everyday
@@ -80,7 +80,7 @@ options.
 
 * For how it works, platform specifics (Docker Desktop vs. native Docker on
   Linux), and configuration options, see
-  [`scripts/mcps/chrome-host/README.md`](../scripts/mcps/chrome-host/README.md).
+  [`tools/agents/mcps/chrome-host/README.md`](../tools/agents/mcps/chrome-host/README.md).
 
 [mcp]: https://modelcontextprotocol.io/
 [chrome-devtools-mcp]: https://github.com/ChromeDevTools/chrome-devtools-mcp

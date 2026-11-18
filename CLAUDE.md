@@ -63,4 +63,4 @@ Specialized agents live in [.claude/agents/](.claude/agents/).
 MCP-capable assistants in the `devcontainer` can drive host Chrome to verify the
 rendered component previews in a real browser. See
 [docs/ai-integration.md](docs/ai-integration.md) and
-[scripts/mcps/chrome-host/README.md](scripts/mcps/chrome-host/README.md).
+[tools/agents/mcps/chrome-host/README.md](tools/agents/mcps/chrome-host/README.md).

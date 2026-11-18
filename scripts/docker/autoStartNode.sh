@@ -8,8 +8,8 @@ LOCK_HASH_FILE="node_modules/.package-lock-hash"
 # Parent directory of the script
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-# Change to the parent directory of the script
-cd "$SCRIPT_DIR/.."
+# Change to the root directory
+cd "$SCRIPT_DIR/../.."
 
 # Install dependencies if node_modules is missing or out of date
 CURRENT_HASH=$(sha256sum package-lock.json | awk '{print $1}')

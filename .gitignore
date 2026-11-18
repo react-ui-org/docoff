@@ -11,8 +11,8 @@
 !/.env.*.dist
 /docker-compose.yml
 /docker-compose.yml.backup
-/docker/docoff_devcontainer_local/*
-!/docker/docoff_devcontainer_local/Dockerfile.dist
+/docker/docoff-devcontainer-local/*
+!/docker/docoff-devcontainer-local/Dockerfile.dist
 
 # Local AI assistant files
 /.claude/settings.local.json
