@@ -291,7 +291,7 @@ The project ships a Dockerized development environment with the `devcontainer`,
 **Set up (once, on the host):** `bash ./setup.sh`
 
 **Run locally:** `docker compose up` — the dev server is served on
-`COMPOSE_START_PORT` (`8080` by default).
+`COMPOSE_WEB_SERVER_PORT` (`21040` by default).
 
 **Open shell (access to `npm` etc.):** `docker compose exec devcontainer bash`
 

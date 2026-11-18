@@ -63,7 +63,7 @@ options.
 
    A dedicated browser window opens using a throwaway profile, so your everyday
    browser and its logins are untouched. The command is safe to re-run. It opens
-   the dev server (`http://localhost:${COMPOSE_START_PORT:-8080}`) by default —
+   the dev server (`http://localhost:<COMPOSE_WEB_SERVER_PORT>`) by default —
    start it with `npm start` inside the `devcontainer`.
 
 2. **Trust the project's MCP servers.** All three assistants are pre-configured
