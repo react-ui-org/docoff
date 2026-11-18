@@ -10,12 +10,5 @@ export const moduleConfig = () => ({
       test: /\.(js|jsx)$/,
       use: [{ loader: 'babel-loader' }],
     },
-    {
-      test: /\.css$/i,
-      use: [
-        { loader: 'style-loader' },
-        { loader: 'css-loader' },
-      ],
-    },
   ],
 });
