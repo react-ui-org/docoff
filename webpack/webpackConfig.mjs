@@ -32,7 +32,7 @@ export const webpackConfig = (webpackArgs) => {
     entry: entryConfig(),
     module: moduleConfig(),
     output: outputConfig(),
-    performance: performanceConfig(),
+    performance: performanceConfig(environment),
     plugins: pluginsConfig(environment),
     resolve: resolveConfig(),
   });
