@@ -88,10 +88,5 @@
     "babel-preset-current-node-syntax": {
       "@babel/core": "$@babel/core"
     }
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(react-docgen|strip-indent|min-indent)/)"
-    ]
   }
 }
