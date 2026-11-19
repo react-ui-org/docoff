@@ -17,7 +17,7 @@
   "author": "The React UI Authors (https://github.com/react-ui-org/react-ui/graphs/contributors)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/react-ui-org/react-ui/issues"
+    "url": "https://github.com/react-ui-org/docoff/issues"
   },
   "browser": "public/generated/bundle.js",
   "files": [
