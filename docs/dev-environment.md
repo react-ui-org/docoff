@@ -94,8 +94,6 @@ All configuration lives in `.env` (created from `.env.dist`). Key variables:
 * `COMPOSE_UID` / `COMPOSE_GID` — host user/group IDs for correct file
   ownership in mounted volumes.
 * `COMPOSE_AUTOSTART` — auto install/build/serve in the `node` container.
-* `PW_WORKERS` / `PW_CT_PORT` — Playwright worker count and Component Testing
-  port.
 * `EDITOR` / `VISUAL` / `SHELL` — preferred editor and shell in the container.
 * `BLOCK_SSH_AUTH_SOCK` — opt out of SSH agent forwarding into the container.
 * `CHROME_DEBUG_PORT` / `CHROME_BIN` — Chrome-host bridge overrides
