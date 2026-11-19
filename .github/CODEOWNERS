@@ -7,6 +7,9 @@
 # Soft gates — any team member can review, but relevant expert is notified
 
 # Infrastructure & build tooling
+/.devcontainer/             @bedrich-schindler @mbohal @react-ui-org/maintainers
+/.env.dist                  @bedrich-schindler @mbohal @react-ui-org/maintainers
+/.github/workflows/         @bedrich-schindler @mbohal @react-ui-org/maintainers
 /docker/                    @bedrich-schindler @mbohal @react-ui-org/maintainers
 /docker-compose.base.yml    @bedrich-schindler @mbohal @react-ui-org/maintainers
 /docker-compose.yml.dist    @bedrich-schindler @mbohal @react-ui-org/maintainers
