@@ -56,6 +56,7 @@
     "postinstall": "sh scripts/writeLockfileHash.sh",
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
+    "start:chrome": "sh ./tools/agents/mcps/chrome-host/start-host-chrome.sh",
     "test:jest": "jest"
   },
   "dependencies": {
