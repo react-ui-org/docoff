@@ -81,8 +81,8 @@ whether it does so correctly, cleanly, safely, and with tests.
 Easy-to-miss invariants beyond the generic checks above:
 
 * **Lint & test gate** ([CLAUDE.md](../../CLAUDE.md#commands)): remind the author
-  to run `npm run build`, `npm run lint` and `npm run test:jest` before committing, plus
-  any Playwright tests the change touches.
+  to run `npm run build`, `npm run lint` and `npm run test:jest` before
+  committing, plus any Playwright tests the change touches.
 * **Git hygiene** ([git.md](../rules/git.md)): no push or remote change without
   approval; commit/PR subjects imperative English with backticked symbols and a
   trailing `(#issue)` when one exists; **no `Co-Authored-By`**.

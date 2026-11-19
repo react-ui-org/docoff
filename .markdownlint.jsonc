@@ -1,0 +1,16 @@
+// See https://github.com/DavidAnson/markdownlint#rules--aliases for the complete list of rules.
+{
+  "default": true,
+  "MD007": { // Unordered list indentation
+    "indent": 4 // 4 spaces so parsers (MkDocs, Bitbucket, etc.) can render nested lists correctly
+  },
+  "MD013": { // Line length
+    "code_block_line_length": 120, // Max length inside code blocks
+    "tables": false // Do not check length inside tables
+  },
+  "MD024": { // Allow duplicate headings
+    "siblings_only": true // Only check sibling headings
+  },
+  "MD033": false, // Allow inline HTML and custom components
+  "MD060": false // Do not enforce table column alignment (emoji widths break it)
+}

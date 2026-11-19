@@ -50,8 +50,9 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "lint": "npm run lint:eslint",
+    "lint": "npm run lint:eslint && npm run lint:markdownlint",
     "lint:eslint": "eslint",
+    "lint:markdownlint": "markdownlint-cli2",
     "postinstall": "sh scripts/writeLockfileHash.sh",
     "prepublishOnly": "npm run build",
     "start": "webpack serve --mode=development",
@@ -81,6 +82,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "eslint": "^9.39.5",
     "jest": "^30.5.2",
+    "markdownlint-cli2": "^0.23.3",
     "webpack": "^5.111.1",
     "webpack-cli": "^7.2.3",
     "webpack-dev-server": "^6.0.0"
