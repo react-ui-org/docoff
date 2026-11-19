@@ -26,9 +26,8 @@ that the `npm`, `node` and `npx` wrappers and the AI assistants can run
 commands in the other service containers (Docker-from-Docker). Access to the
 Docker socket is equivalent to **root on the host**: anything running inside
 the `devcontainer` — including the AI assistants — can start privileged
-containers and mount host paths. Passwordless `sudo` inside the container is
-limited to `docker` and `chown` for the same reason. Only use this environment
-with code and tools you trust.
+containers and mount host paths. Only use this environment with code and tools
+you trust.
 
 ## Requirements
 
