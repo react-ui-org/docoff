@@ -13,7 +13,7 @@
   ],
   "portsAttributes": {
     "node:8080": {
-      "label": "Dev server",
+      "label": "Web server",
       "protocol": "http",
       "onAutoForward": "openBrowser"
     }
