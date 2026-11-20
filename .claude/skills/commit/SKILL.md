@@ -39,7 +39,7 @@ If nothing is staged, stop and tell the user.
 Before committing, check the following:
 
 * `npm run build` passes
-* `npm test` passes (ESLint + Jest)
+* `npm run lint` and `npm run test:jest` pass
 * If the change touches Playwright tests, run them too
   (`npm run test:playwright...`, executed in the `playwright` container).
 

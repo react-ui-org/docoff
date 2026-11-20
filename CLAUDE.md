@@ -28,9 +28,8 @@ Run these inside the `devcontainer` (from the host, prefix with
 | Install JS                  | `npm ci`                    |
 | Build library               | `npm run build`             |
 | Start dev server            | `npm start`                 |
-| Run all checks (lint+tests) | `npm test`                  |
-| Run ESLint only             | `npm run test:eslint`       |
-| Run Jest only               | `npm run test:jest`         |
+| Run ESLint                  | `npm run lint`              |
+| Run Jest                    | `npm run test:jest`         |
 
 Notes:
 
@@ -63,4 +62,4 @@ Specialized agents live in [.claude/agents/](.claude/agents/).
 MCP-capable assistants in the `devcontainer` can drive host Chrome to verify the
 rendered component previews in a real browser. See
 [docs/ai-integration.md](docs/ai-integration.md) and
-[scripts/mcps/chrome-host/README.md](scripts/mcps/chrome-host/README.md).
+[tools/agents/mcps/chrome-host/README.md](tools/agents/mcps/chrome-host/README.md).

@@ -14,10 +14,10 @@
     "react-component-library"
   ],
   "homepage": "https://github.com/react-ui-org/docoff",
-  "author": "The React UI Authors (https://github.com/react-ui-org/react-ui/graphs/contributors)",
+  "author": "The React UI Authors (https://github.com/react-ui-org/docoff/graphs/contributors)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/react-ui-org/react-ui/issues"
+    "url": "https://github.com/react-ui-org/docoff/issues"
   },
   "browser": "public/generated/bundle.js",
   "files": [
@@ -25,7 +25,7 @@
     "public/generated/bundle.js.LICENSE.txt",
     "public/main.css",
     "public/shadow.css",
-    "scripts/write-lockfile-hash.sh",
+    "scripts/writeLockfileHash.sh",
     "src",
     "!src/**/*.test.js"
   ],
@@ -48,6 +48,17 @@
       "onFail": "error"
     }
   },
+  "scripts": {
+    "build": "webpack --mode=production",
+    "lint": "npm run lint:eslint && npm run lint:markdownlint",
+    "lint:eslint": "eslint",
+    "lint:markdownlint": "markdownlint-cli2",
+    "postinstall": "sh scripts/writeLockfileHash.sh",
+    "prepublishOnly": "npm run build",
+    "start": "webpack serve --mode=development",
+    "start:chrome": "sh ./tools/agents/mcps/chrome-host/start-host-chrome.sh",
+    "test:jest": "jest"
+  },
   "dependencies": {
     "@ungap/custom-elements": "^1.3.0",
     "assert": "^2.1.0",
@@ -66,13 +77,13 @@
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
     "@react-ui-org/eslint-config": "^1.1.0",
+    "babel-jest": "^30.5.2",
     "babel-loader": "^10.1.1",
     "babel-plugin-polyfill-corejs3": "^1.0.0",
     "babel-plugin-prismjs": "^2.1.0",
-    "css-loader": "^7.1.5",
     "eslint": "^9.39.5",
     "jest": "^30.5.2",
-    "style-loader": "^4.0.0",
+    "markdownlint-cli2": "^0.23.3",
     "webpack": "^5.111.1",
     "webpack-cli": "^7.2.3",
     "webpack-dev-server": "^6.0.0"
@@ -81,19 +92,5 @@
     "babel-preset-current-node-syntax": {
       "@babel/core": "$@babel/core"
     }
-  },
-  "scripts": {
-    "build": "webpack --mode=production",
-    "postinstall": "sh scripts/write-lockfile-hash.sh",
-    "prepublishOnly": "npm run build",
-    "start": "webpack serve --mode=development",
-    "test": "npm run test:eslint && npm run test:jest",
-    "test:eslint": "eslint src",
-    "test:jest": "jest"
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(react-docgen|strip-indent|min-indent)/)"
-    ]
   }
 }

@@ -12,11 +12,11 @@ Three Docker Compose services:
   Docker-from-Docker), and the AI assistant CLIs. Commands like `npm`, `node`
   and `npx` are thin wrappers that execute inside the `node` container.
 * **`node`** — Node.js environment that runs the build and the webpack dev
-  server (`npm start`), exposed on `COMPOSE_START_PORT` (default `8080`).
+  server (`npm start`), exposed on `COMPOSE_WEB_SERVER_PORT` (default `21040`).
 * **`playwright`** — Playwright environment for browser automation and testing.
   Any npm script whose name starts with `test:playwright` is routed here
   automatically by the `npm` wrapper. Its report server is exposed on
-  `COMPOSE_PLAYWRIGHT_REPORT_PORT` (default `9323`). The project must add its own
+  `COMPOSE_PLAYWRIGHT_REPORT_PORT` (default `21042`). The project must add its own
   Playwright config and `test:playwright*` scripts to use it.
 
 ## Security note
@@ -26,9 +26,8 @@ that the `npm`, `node` and `npx` wrappers and the AI assistants can run
 commands in the other service containers (Docker-from-Docker). Access to the
 Docker socket is equivalent to **root on the host**: anything running inside
 the `devcontainer` — including the AI assistants — can start privileged
-containers and mount host paths. Passwordless `sudo` inside the container is
-limited to `docker` and `chown` for the same reason. Only use this environment
-with code and tools you trust.
+containers and mount host paths. Only use this environment with code and tools
+you trust.
 
 ## Requirements
 
@@ -72,10 +71,11 @@ docker compose exec devcontainer <your shell>   # e.g. bash / fish / zsh
 From inside the `devcontainer`:
 
 ```bash
-npm ci          # install dependencies
-npm run build   # build the library
-npm start       # start the webpack dev server on COMPOSE_START_PORT (8080)
-npm test        # ESLint + Jest
+npm ci             # install dependencies
+npm run build      # build the library
+npm start          # start the webpack dev server on COMPOSE_WEB_SERVER_PORT (21040)
+npm run lint       # ESLint
+npm run test:jest  # Jest
 ```
 
 To have the `node` container install, build and serve automatically on start,
@@ -86,14 +86,13 @@ set `COMPOSE_AUTOSTART=true` in `.env`.
 All configuration lives in `.env` (created from `.env.dist`). Key variables:
 
 * `COMPOSE_PROJECT_NAME` — Compose project name (derived from the directory).
-* `COMPOSE_START_PORT` — host port for the webpack dev server (default `8080`).
+* `COMPOSE_WEB_SERVER_PORT` — host port for the webpack dev server (default
+  `21040`).
 * `COMPOSE_PLAYWRIGHT_REPORT_PORT` — host port for the Playwright report server
-  (default `9323`).
+  (default `21042`).
 * `COMPOSE_UID` / `COMPOSE_GID` — host user/group IDs for correct file
   ownership in mounted volumes.
 * `COMPOSE_AUTOSTART` — auto install/build/serve in the `node` container.
-* `PW_WORKERS` / `PW_CT_PORT` — Playwright worker count and Component Testing
-  port.
 * `EDITOR` / `VISUAL` / `SHELL` — preferred editor and shell in the container.
 * `BLOCK_SSH_AUTH_SOCK` — opt out of SSH agent forwarding into the container.
 * `CHROME_DEBUG_PORT` / `CHROME_BIN` — Chrome-host bridge overrides
