@@ -65,7 +65,7 @@
     "@babel/preset-env": "^8.0.7",
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.7",
-    "@react-ui-org/eslint-config": "^1.1.0",
+    "@react-ui-org/eslint-config": "^2.0.0",
     "babel-loader": "^10.1.1",
     "babel-plugin-polyfill-corejs3": "^1.0.0",
     "babel-plugin-prismjs": "^2.1.0",
