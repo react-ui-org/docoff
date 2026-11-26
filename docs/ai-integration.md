@@ -3,6 +3,7 @@
 The `devcontainer` ships several AI coding assistants:
 
 * **Claude Code**
+* **Codex**
 * **GitHub Copilot CLI**
 * **OpenCode**
 
@@ -66,11 +67,14 @@ options.
    the dev server (`http://localhost:${COMPOSE_START_PORT:-8080}`) by default —
    start it with `npm start` inside the `devcontainer`.
 
-2. **Trust the project's MCP servers.** All three assistants are pre-configured
-   in the repository. Each asks you once, on first run, to trust the project's
-   MCP servers — approve it.
+2. **Trust the project's MCP servers.** All four assistants are pre-configured
+   in the repository. Each asks you once, on first run, to trust the project
+   or its MCP servers — approve it.
 
     * **Claude** and **GitHub Copilot CLI** read the project's `.mcp.json`.
+    * **Codex** reads the project's `.codex/config.toml` once you trust the
+      project. The file also points Codex to the project instructions in
+      `CLAUDE.md`.
     * **OpenCode** reads the project's `opencode.json`.
 
 3. **Use it.** The assistant can now navigate, click, screenshot, and inspect

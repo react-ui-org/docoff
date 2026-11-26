@@ -1,7 +1,7 @@
 # Development Environment
 
 This project ships a Dockerized development environment with AI coding
-assistants (Claude Code, GitHub Copilot CLI, OpenCode) pre-installed.
+assistants (Claude Code, Codex, GitHub Copilot CLI, OpenCode) pre-installed.
 
 ## What the stack contains
 
